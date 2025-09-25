@@ -17,15 +17,36 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
+        background: {
+          DEFAULT: "hsl(var(--background))",
+          secondary: "hsl(var(--background-secondary))",
+          tertiary: "hsl(var(--background-tertiary))",
+        },
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          dark: "hsl(var(--primary-dark))",
+          light: "hsl(var(--primary-light))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
+          dark: "hsl(var(--secondary-dark))",
+          light: "hsl(var(--secondary-light))",
+        },
+        glass: {
+          DEFAULT: "hsl(var(--glass))",
+          strong: "hsl(var(--glass-strong))",
+          border: "hsl(var(--glass-border))",
+        },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -47,21 +68,29 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
-        },
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
+        lg: "var(--radius-lg)",
+        md: "var(--radius)",
         sm: "calc(var(--radius) - 4px)",
+        xl: "var(--radius-xl)",
+      },
+      backgroundImage: {
+        "gradient-primary": "var(--gradient-primary)",
+        "gradient-hero": "var(--gradient-hero)",
+        "gradient-glass": "var(--gradient-glass)",
+        "gradient-card": "var(--gradient-card)",
+      },
+      boxShadow: {
+        glass: "var(--shadow-glass)",
+        glow: "var(--shadow-glow)",
+        card: "var(--shadow-card)",
+        elevation: "var(--shadow-elevation)",
+      },
+      backdropBlur: {
+        xs: "2px",
+        glass: "20px",
+        "glass-strong": "25px",
       },
       keyframes: {
         "accordion-down": {
