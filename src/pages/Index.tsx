@@ -1,121 +1,117 @@
-import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle, Users, Zap } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion'; 
+import { HeroSection } from '@/components/layout/hero-section';
+import { LanguageSwitcher } from '@/components/ui/language-switcher';
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
-import heroImage from "@/assets/hero-image.jpg";
-
-const features = [
-  {
-    icon: Users,
-    title: "Client Management",
-    description: "Organize and track all your clients with powerful CRM features."
-  },
-  {
-    icon: Zap,
-    title: "Project Tracking",
-    description: "Keep your projects on track with intuitive kanban boards."
-  },
-  {
-    icon: CheckCircle,
-    title: "Task Management",
-    description: "Never miss a deadline with smart task scheduling."
-  },
-];
+import { Badge } from "@/components/ui/badge";
+import { 
+  Users, 
+  FolderOpen, 
+  Receipt, 
+  ArrowRight,
+  CheckCircle,
+  Star,
+  Zap,
+  Shield,
+  Sparkles
+} from "lucide-react";
+import { Link } from 'react-router-dom';
+import { initGSAP } from '@/lib/gsap';
 
 const Index = () => {
+  const { t } = useTranslation('common');
+
+  useEffect(() => {
+    initGSAP();
+  }, []);
+
+  const services = [
+    {
+      icon: Users,
+      title: t('clientManagement'),
+      description: t('clientManagementDesc'),
+      color: 'text-primary'
+    },
+    {
+      icon: FolderOpen,
+      title: t('projectTracking'),  
+      description: t('projectTrackingDesc'),
+      color: 'text-secondary'
+    },
+    {
+      icon: Receipt,
+      title: t('expenseManagement'),
+      description: t('expenseManagementDesc'),
+      color: 'text-accent'
+    }
+  ];
+
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 z-0"
-          style={{
-            backgroundImage: `url(${heroImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            opacity: 0.3
-          }}
-        />
-        
-        {/* Hero Content */}
-        <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 className="text-6xl md:text-8xl font-bold mb-6">
-              <span className="gradient-text">Veronika</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              The complete business management platform that transforms how you handle clients, projects, and growth.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/dashboard">
-                <Button size="lg" className="bg-gradient-primary hover:opacity-90 text-lg px-8 py-4 h-auto">
-                  Launch Dashboard
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link to="/book">
-                <Button variant="outline" size="lg" className="glass border-glass-border text-lg px-8 py-4 h-auto">
-                  Book Demo
-                </Button>
-              </Link>
+      {/* Navigation Header */}
+      <nav className="fixed top-0 left-0 right-0 z-50 p-4">
+        <div className="container-max flex justify-between items-center">
+          <Link to="/" className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center">
+              <span className="text-white font-bold text-lg">V</span>
             </div>
-          </motion.div>
+            <div>
+              <h2 className="text-xl font-display font-bold gradient-text">Veronika</h2>
+              <p className="text-xs text-muted-foreground">Luxury Business Studio</p>
+            </div>
+          </Link>
+          
+          <div className="flex items-center gap-4">
+            <LanguageSwitcher variant="minimal" />
+            <Link to="/dashboard">
+              <Button variant="outline" className="glass-strong border-glass-border">
+                Dashboard
+              </Button>
+            </Link>
+          </div>
         </div>
+      </nav>
 
-        {/* Floating Elements */}
-        <motion.div
-          className="absolute top-20 left-20 w-20 h-20 rounded-full bg-gradient-primary opacity-20"
-          animate={{ y: [-10, 10, -10] }}
-          transition={{ duration: 4, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-20 right-20 w-16 h-16 rounded-full bg-gradient-hero opacity-30"
-          animate={{ y: [10, -10, 10] }}
-          transition={{ duration: 3, repeat: Infinity }}
-        />
-      </section>
+      {/* Hero Section */}
+      <HeroSection />
 
-      {/* Features Section */}
-      <section className="py-24 px-6">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold gradient-text mb-4">
-              Everything You Need
+      {/* Services Section */}
+      <section className="py-20 px-4 sm:px-8">
+        <div className="container-max">
+          <div className="text-center mb-16">
+            <Badge variant="secondary" className="mb-4 glass-strong border-glass-border">
+              {t('servicesTitle')}
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold gradient-text mb-6">
+              Executive-Grade Solutions
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Built for modern businesses who want to scale efficiently
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Sophisticated tools designed for discerning professionals who demand excellence.
             </p>
-          </motion.div>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
+          <div className="grid md:grid-cols-3 gap-8">
+            {services.map((service, index) => (
               <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
+                key={index}
+                initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.2 }}
+                viewport={{ once: true }}
               >
-                <GlassCard variant="strong" className="p-8 text-center hover:glow-primary transition-all duration-300">
-                  <div className="w-16 h-16 mx-auto mb-6 rounded-xl bg-gradient-primary flex items-center justify-center">
-                    <feature.icon className="h-8 w-8 text-white" />
+                <GlassCard variant="strong" className="p-8 h-full hover:scale-105 transition-all duration-300 group">
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <div className={`p-4 rounded-2xl glass ${service.color} bg-opacity-10`}>
+                      <service.icon className={`h-8 w-8 ${service.color}`} />
+                    </div>
+                    <h3 className="text-xl font-display font-semibold">{service.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed">{service.description}</p>
+                    <div className="pt-4">
+                      <ArrowRight className="h-5 w-5 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
                   </div>
-                  <h3 className="text-xl font-semibold text-card-foreground mb-3">
-                    {feature.title}
-                  </h3>
-                  <p className="text-muted-foreground">
-                    {feature.description}
-                  </p>
                 </GlassCard>
               </motion.div>
             ))}
@@ -124,30 +120,48 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6 }}
-          >
-            <GlassCard variant="strong" className="p-12 glow-primary">
-              <h2 className="text-3xl md:text-4xl font-bold gradient-text mb-4">
-                Ready to Transform Your Business?
-              </h2>
-              <p className="text-xl text-muted-foreground mb-8">
-                Join thousands of businesses already using Veronika to scale efficiently.
-              </p>
-              <Link to="/dashboard">
-                <Button size="lg" className="bg-gradient-primary hover:opacity-90 text-lg px-12 py-4 h-auto">
-                  Get Started Now
+      <section className="py-20 px-4 sm:px-8">
+        <div className="container-max">
+          <GlassCard variant="strong" className="p-12 text-center">
+            <h2 className="text-3xl sm:text-4xl font-display font-bold gradient-text mb-6">
+              Ready to Experience Luxury Business Management?
+            </h2>
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Join executives who trust Veronika with their most important business operations.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/book">
+                <Button size="lg" className="btn-luxury px-8 py-4 text-lg">
+                  {t('bookDemo')}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-            </GlassCard>
-          </motion.div>
+              
+              <Link to="/dashboard">
+                <Button variant="outline" size="lg" className="glass-strong border-glass-border px-8 py-4 text-lg">
+                  Explore Dashboard
+                </Button>
+              </Link>
+            </div>
+          </GlassCard>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="py-12 px-4 sm:px-8 border-t border-glass-border/50">
+        <div className="container-max text-center">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center">
+              <span className="text-white font-bold">V</span>
+            </div>
+            <span className="text-xl font-display font-bold gradient-text">Veronika</span>
+          </div>
+          <p className="text-muted-foreground text-sm">
+            © 2024 Veronika N. Dimitrova. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };
