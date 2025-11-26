@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion'; 
+import { motion } from 'framer-motion';
 import { HeroSection } from '@/components/layout/hero-section';
 import { LanguageSwitcher } from '@/components/ui/language-switcher';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
@@ -65,6 +66,7 @@ const Index = () => {
           
           <div className="flex items-center gap-4">
             <LanguageSwitcher variant="minimal" />
+            <ThemeToggle />
             <Link to="/dashboard">
               <Button variant="outline" className="glass-strong border-glass-border">
                 Dashboard
