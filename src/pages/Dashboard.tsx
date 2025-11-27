@@ -1,46 +1,51 @@
 import { motion } from "framer-motion";
 import { Users, FolderOpen, DollarSign, TrendingUp, Calendar, FileText } from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
+import { useTranslation } from 'react-i18next';
 
 const statsData = [
   {
-    title: "Total Clients",
+    titleKey: "totalClients",
     value: "24",
     change: "+12%",
     icon: Users,
-    color: "text-primary",
+    colorClass: "text-[hsl(243,75%,59%)]",
+    bgClass: "bg-[hsl(243,75%,59%,0.2)]",
   },
   {
-    title: "Active Projects",
+    titleKey: "activeProjects",
     value: "8",
     change: "+5%",
     icon: FolderOpen,
-    color: "text-secondary",
+    colorClass: "text-[hsl(199,89%,48%)]",
+    bgClass: "bg-[hsl(199,89%,48%,0.2)]",
   },
   {
-    title: "Revenue (30d)",
-    value: "$12,450",
+    titleKey: "monthlyRevenue",
+    value: "\,450",
     change: "+18%",
     icon: DollarSign,
-    color: "text-success",
+    colorClass: "text-[hsl(142,71%,45%)]",
+    bgClass: "bg-[hsl(142,71%,45%,0.2)]",
   },
   {
-    title: "Growth Rate",
-    value: "23.5%",
-    change: "+2.1%",
+    titleKey: "upcomingSessions",
+    value: "6",
+    change: "+2",
     icon: TrendingUp,
-    color: "text-accent",
+    colorClass: "text-[hsl(45,93%,47%)]",
+    bgClass: "bg-[hsl(45,93%,47%,0.2)]",
   },
 ];
 
 const recentProjects = [
-  { name: "Website Redesign", client: "TechCorp", progress: 75, status: "In Progress" },
-  { name: "Mobile App", client: "StartupXYZ", progress: 45, status: "In Progress" },
-  { name: "Brand Identity", client: "LocalBiz", progress: 90, status: "Review" },
-  { name: "E-commerce Site", client: "RetailCo", progress: 30, status: "Planning" },
+  { name: "Business Analysis", client: "TechCorp", progress: 75, status: "In Progress" },
+  { name: "Pitch Deck", client: "StartupXYZ", progress: 45, status: "In Progress" },
+  { name: "Financial Review", client: "LocalBiz", progress: 90, status: "Review" },
+  { name: "Strategy Session", client: "RetailCo", progress: 30, status: "Planning" },
 ];
 
 const upcomingTasks = [
@@ -51,6 +56,8 @@ const upcomingTasks = [
 ];
 
 export default function Dashboard() {
+  const { t } = useTranslation('common');
+
   return (
     <DashboardLayout>
       <div className="space-y-8">
@@ -60,8 +67,8 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-3xl font-bold gradient-text mb-2">Dashboard Overview</h1>
-          <p className="text-muted-foreground">Welcome back! Here's what's happening with your business.</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">{t('overview')}</h1>
+          <p className="text-muted-foreground">{t('welcomeBack')}</p>
         </motion.div>
 
         {/* Stats Grid */}
@@ -73,23 +80,23 @@ export default function Dashboard() {
         >
           {statsData.map((stat, index) => (
             <motion.div
-              key={stat.title}
+              key={stat.titleKey}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
             >
-              <GlassCard variant="strong" className="p-6 hover:glow-primary transition-all duration-300">
+              <Card className="p-6 bg-card border-border">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground mb-1">{stat.title}</p>
-                    <p className="text-2xl font-bold text-card-foreground">{stat.value}</p>
-                    <p className="text-sm text-success mt-1">{stat.change} from last month</p>
+                    <p className="text-sm text-muted-foreground mb-1">{t(stat.titleKey)}</p>
+                    <p className={"text-2xl font-bold " + stat.colorClass}>{stat.value}</p>
+                    <p className="text-sm text-green-500 mt-1">{stat.change} from last month</p>
                   </div>
-                  <div className={`p-3 rounded-lg bg-gradient-primary/20 ${stat.color}`}>
-                    <stat.icon className="h-6 w-6" />
+                  <div className={"p-3 rounded-xl " + stat.bgClass}>
+                    <stat.icon className={"h-6 w-6 " + stat.colorClass} />
                   </div>
                 </div>
-              </GlassCard>
+              </Card>
             </motion.div>
           ))}
         </motion.div>
@@ -101,10 +108,10 @@ export default function Dashboard() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <GlassCard variant="strong" className="p-6">
+            <Card className="p-6 bg-card border-border">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-semibold text-card-foreground">Recent Projects</h3>
-                <Button variant="outline" size="sm" className="glass border-glass-border">
+                <h3 className="text-xl font-semibold text-card-foreground">{t('recentProjects')}</h3>
+                <Button variant="outline" size="sm">
                   View All
                 </Button>
               </div>
@@ -115,7 +122,7 @@ export default function Dashboard() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: 0.4 + index * 0.1 }}
-                    className="flex items-center justify-between p-4 rounded-lg bg-glass/30 border border-glass-border"
+                    className="flex items-center justify-between p-4 rounded-lg bg-muted/30 border border-border"
                   >
                     <div className="flex-1">
                       <h4 className="font-medium text-card-foreground">{project.name}</h4>
@@ -125,7 +132,7 @@ export default function Dashboard() {
                       </div>
                     </div>
                     <div className="ml-4 text-right">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/20 text-primary">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-500/20 text-green-500">
                         {project.status}
                       </span>
                       <p className="text-sm text-muted-foreground mt-1">{project.progress}%</p>
@@ -133,7 +140,7 @@ export default function Dashboard() {
                   </motion.div>
                 ))}
               </div>
-            </GlassCard>
+            </Card>
           </motion.div>
 
           {/* Upcoming Tasks */}
@@ -142,10 +149,10 @@ export default function Dashboard() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <GlassCard variant="strong" className="p-6">
+            <Card className="p-6 bg-card border-border">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-semibold text-card-foreground">Upcoming Tasks</h3>
-                <Button variant="outline" size="sm" className="glass border-glass-border">
+                <h3 className="text-xl font-semibold text-card-foreground">{t('upcomingTasks')}</h3>
+                <Button variant="outline" size="sm">
                   <Calendar className="h-4 w-4 mr-2" />
                   Schedule
                 </Button>
@@ -157,12 +164,12 @@ export default function Dashboard() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
-                    className="flex items-center gap-4 p-3 rounded-lg hover:bg-glass/30 transition-colors"
+                    className="flex items-center gap-4 p-3 rounded-lg hover:bg-muted/30 transition-colors"
                   >
-                    <div className={`w-2 h-2 rounded-full ${
-                      task.priority === 'high' ? 'bg-destructive' :
-                      task.priority === 'medium' ? 'bg-warning' : 'bg-success'
-                    }`} />
+                    <div className={"w-2 h-2 rounded-full " + (
+                      task.priority === 'high' ? 'bg-red-500' :
+                      task.priority === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
+                    )} />
                     <div className="flex-1">
                       <p className="font-medium text-card-foreground">{task.task}</p>
                       <p className="text-sm text-muted-foreground">{task.time}</p>
@@ -173,7 +180,7 @@ export default function Dashboard() {
                   </motion.div>
                 ))}
               </div>
-            </GlassCard>
+            </Card>
           </motion.div>
         </div>
 
@@ -183,23 +190,23 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
         >
-          <GlassCard variant="strong" className="p-6">
+          <Card className="p-6 bg-card border-border">
             <h3 className="text-xl font-semibold text-card-foreground mb-4">Quick Actions</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Button className="bg-gradient-primary hover:opacity-90 h-12">
-                Add Client
+              <Button className="bg-primary hover:bg-primary/90 h-12">
+                {t('add')} Client
               </Button>
-              <Button variant="outline" className="glass border-glass-border h-12">
+              <Button variant="outline" className="h-12">
                 New Project
               </Button>
-              <Button variant="outline" className="glass border-glass-border h-12">
+              <Button variant="outline" className="h-12">
                 Create Invoice
               </Button>
-              <Button variant="outline" className="glass border-glass-border h-12">
+              <Button variant="outline" className="h-12">
                 Schedule Meeting
               </Button>
             </div>
-          </GlassCard>
+          </Card>
         </motion.div>
       </div>
     </DashboardLayout>

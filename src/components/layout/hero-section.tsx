@@ -2,186 +2,115 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { GlassCard } from '@/components/ui/glass-card';
-import { ArrowRight, Sparkles, Crown, Star } from 'lucide-react';
-import { gsap, animations } from '@/lib/gsap';
+import { ArrowRight, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function HeroSection() {
   const { t } = useTranslation('common');
-  const heroRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const subtitleRef = useRef<HTMLParagraphElement>(null);
-  const descriptionRef = useRef<HTMLParagraphElement>(null);
-  const buttonsRef = useRef<HTMLDivElement>(null);
-  const decorativeRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!heroRef.current) return;
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.2,
+      },
+    },
+  };
 
-    const ctx = gsap.context(() => {
-      // Main hero entrance animation
-      const tl = gsap.timeline({ delay: 0.3 });
-      
-      tl.fromTo(titleRef.current, {
-        opacity: 0,
-        y: 100,
-        scale: 0.9,
-      }, {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 1.2,
-        ease: "power3.out",
-      })
-      .fromTo(subtitleRef.current, {
-        opacity: 0,
-        y: 50,
-      }, {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: "power2.out",
-      }, "-=0.8")
-      .fromTo(descriptionRef.current, {
-        opacity: 0,
-        y: 30,
-      }, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power2.out",
-      }, "-=0.6")
-      .fromTo(buttonsRef.current, {
-        opacity: 0,
-        y: 30,
-      }, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power2.out",
-      }, "-=0.4");
-
-      // Floating decorative elements
-      if (decorativeRef.current) {
-        const decorativeElements = decorativeRef.current.children;
-        Array.from(decorativeElements).forEach((element, index) => {
-          animations.float(element, 15 + index * 5);
-        });
-      }
-
-      // Gradient background animation
-      gsap.set(heroRef.current, {
-        backgroundImage: `
-          radial-gradient(circle at 20% 80%, hsl(268 96% 53% / 0.15) 0%, transparent 50%),
-          radial-gradient(circle at 80% 20%, hsl(185 94% 45% / 0.15) 0%, transparent 50%),
-          radial-gradient(circle at 40% 40%, hsl(280 100% 70% / 0.1) 0%, transparent 50%)
-        `,
-      });
-
-    }, heroRef);
-
-    return () => ctx.revert();
-  }, []);
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: [0.4, 0, 0.2, 1] },
+    },
+  };
 
   return (
-    <section 
-      ref={heroRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-8"
-    >
-      {/* Decorative floating elements */}
-      <div ref={decorativeRef} className="absolute inset-0 pointer-events-none">
-        <motion.div 
-          className="absolute top-20 left-10 text-primary/20"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        >
-          <Crown className="h-8 w-8" />
-        </motion.div>
-        <motion.div 
-          className="absolute top-40 right-20 text-secondary/20"
-          animate={{ rotate: -360 }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-        >
-          <Sparkles className="h-6 w-6" />
-        </motion.div>
-        <motion.div 
-          className="absolute bottom-40 left-20 text-accent/20"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-        >
-          <Star className="h-7 w-7" />
-        </motion.div>
+    <section className="relative min-h-screen flex items-center pt-20" style={{ backgroundColor: 'hsl(35 43% 97%)' }}>
+      {/* Subtle background accent */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 right-0 w-96 h-96 rounded-full blur-3xl" style={{ backgroundColor: 'hsl(153 41% 30% / 0.05)' }} />
+        <div className="absolute bottom-1/4 left-0 w-96 h-96 rounded-full blur-3xl" style={{ backgroundColor: 'hsl(8 57% 49% / 0.05)' }} />
       </div>
 
-      <div className="container-max text-center relative z-10">
-        <GlassCard variant="strong" className="max-w-5xl mx-auto p-8 sm:p-12 lg:p-16">
-          <div className="space-y-8">
-            {/* Title */}
-            <div className="space-y-6">
-              <h1 
-                ref={titleRef}
-                className="text-4xl sm:text-5xl lg:text-7xl font-display font-bold leading-tight"
-              >
-                <span className="gradient-text">
-                  {t('heroTitle')}
-                </span>
-              </h1>
-              
-              <p 
-                ref={subtitleRef}
-                className="text-xl sm:text-2xl lg:text-3xl text-muted-foreground font-light max-w-4xl mx-auto"
-              >
-                {t('heroSubtitle')}
-              </p>
-              
-              <p 
-                ref={descriptionRef}
-                className="text-lg text-card-foreground/80 max-w-3xl mx-auto leading-relaxed"
-              >
-                {t('heroDescription')}
-              </p>
-            </div>
+      <div className="container-max relative z-10">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* Content */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="space-y-8"
+          >
+            {/* Badge */}
+            <motion.div variants={itemVariants}>
+              <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium" style={{ backgroundColor: 'hsl(153 41% 30% / 0.1)', color: 'hsl(153 41% 30%)' }}>
+                Strategic Business Partner
+              </span>
+            </motion.div>
 
-            {/* CTA Buttons */}
-            <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+            {/* Headline */}
+            <motion.h1 
+              variants={itemVariants}
+              className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-foreground leading-tight"
+            >
+              {t('heroTitle')}
+            </motion.h1>
+
+            {/* Subheadline */}
+            <motion.p 
+              variants={itemVariants}
+              className="text-xl text-muted-foreground max-w-xl leading-relaxed"
+            >
+              {t('heroDescription')}
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4">
               <Link to="/book">
-                <Button 
-                  size="lg" 
-                  className="btn-luxury px-8 py-4 text-lg font-semibold group"
-                >
-                  {t('bookDemo')}
+                <Button size="lg" className="btn-primary text-lg group">
+                  {t('heroCta')}
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
-              
-              <Link to="/dashboard">
-                <Button 
-                  variant="outline" 
-                  size="lg"
-                  className="glass-strong border-glass-border hover:bg-primary/10 px-8 py-4 text-lg"
-                >
-                  {t('learnMore')}
+              <a href="#services">
+                <Button size="lg" variant="outline" className="btn-secondary text-lg">
+                  {t('heroCtaSecondary')}
                 </Button>
-              </Link>
-            </div>
+              </a>
+            </motion.div>
 
-            {/* Trust indicators */}
-            <div className="pt-8 border-t border-glass-border/50">
-              <p className="text-sm text-muted-foreground mb-4">
-                Trusted by premium professionals worldwide
-              </p>
-              <div className="flex justify-center items-center gap-8 opacity-60">
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-current text-secondary" />
-                  ))}
-                </div>
-                <span className="text-sm font-medium">500+ Executive Clients</span>
+            {/* Trust Element */}
+            <motion.div 
+              variants={itemVariants}
+              className="flex items-center gap-3 text-muted-foreground"
+            >
+              <CheckCircle className="h-5 w-5" style={{ color: 'hsl(153 41% 30%)' }} />
+              <span className="text-sm">{t('heroTrust')}</span>
+            </motion.div>
+          </motion.div>
+
+          {/* Photo Placeholder */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.4, ease: [0.4, 0, 0.2, 1] }}
+            className="relative"
+          >
+            <div className="aspect-[4/5] rounded-2xl overflow-hidden" style={{ background: 'linear-gradient(to bottom right, hsl(153 41% 30% / 0.2), hsl(8 57% 49% / 0.2))' }}>
+              {/* Replace with actual photo */}
+              <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
+                <span className="text-lg">Photo of Veronika</span>
               </div>
             </div>
-          </div>
-        </GlassCard>
+            {/* Decorative element */}
+            <div className="absolute -bottom-6 -left-6 w-32 h-32 rounded-2xl -z-10" style={{ backgroundColor: 'hsl(153 41% 30% / 0.1)' }} />
+            <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full -z-10" style={{ backgroundColor: 'hsl(8 57% 49% / 0.1)' }} />
+          </motion.div>
+        </div>
       </div>
     </section>
   );

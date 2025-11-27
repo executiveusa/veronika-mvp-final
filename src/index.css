@@ -2,159 +2,123 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Veronika MVP Design System - Modern Glassmorphism with Premium Brand Colors */
+/* VERONIKA SMART SITE - Warm Strategic Consultant Design System */
+/* Bulgarian-inspired palette with professional warmth */
 
 @layer base {
   :root {
-    /* Brand Colors - Premium Purple & Blue Gradient */
-    --primary: 268 96% 53%;
+    /* ========================================
+       LIGHT MODE (Public Site)
+       Bulgarian soul + professional warmth
+       ======================================== */
+    
+    /* Core Backgrounds */
+    --background: 40 33% 99%;           /* #FEFDFB - Warm white */
+    --background-secondary: 35 43% 97%; /* #FDF8F3 - Soft cream */
+    --background-tertiary: 30 20% 95%;  /* Warm off-white */
+    --foreground: 0 0% 10%;             /* #1A1A1A - Near black */
+    
+    /* Bulgarian-Inspired Accents */
+    --primary: 153 41% 30%;             /* #2D6A4F - Forest green */
     --primary-foreground: 0 0% 100%;
-    --primary-dark: 259 89% 35%;
-    --primary-light: 272 100% 75%;
-
-    /* Secondary - Complementary Teal */
-    --secondary: 185 94% 45%;
+    --primary-dark: 153 41% 20%;
+    --primary-light: 153 41% 45%;
+    
+    --secondary: 8 57% 49%;             /* #C44536 - Warm terracotta */
     --secondary-foreground: 0 0% 100%;
-    --secondary-dark: 185 84% 25%;
-    --secondary-light: 185 94% 75%;
-
-    /* Glassmorphism Background System - Light Theme */
-    --background: 210 20% 97%;
-    --background-secondary: 210 25% 94%;
-    --background-tertiary: 210 18% 90%;
-    --foreground: 220 25% 12%;
-
-    /* Glass Card System */
-    --glass: 0 0% 100% / 0.7;
-    --glass-strong: 0 0% 100% / 0.8;
-    --glass-border: 220 15% 80% / 0.7;
-    --glass-glow: var(--primary) / 0.3;
-
-    /* Card & Surface Colors */
-    --card: 0 0% 100%;
-    --card-foreground: 220 25% 12%;
-    --card-glass: 0 0% 98% / 0.8;
-
-    /* Interactive Elements */
-    --accent: 280 100% 60%;
+    --secondary-dark: 8 57% 35%;
+    --secondary-light: 8 57% 65%;
+    
+    --accent: 143 24% 56%;              /* #84A98C - Sage green */
     --accent-foreground: 0 0% 100%;
-    --muted: 220 15% 85%;
-    --muted-foreground: 220 12% 35%;
-
-    /* Status Colors */
-    --success: 142 48% 40%;
-    --success-foreground: 0 0% 100%;
-    --warning: 38 92% 45%;
-    --warning-foreground: 0 0% 100%;
-    --destructive: 0 72% 55%;
-    --destructive-foreground: 0 0% 100%;
-
-    /* Form Elements */
-    --border: 220 15% 80%;
-    --input: 0 0% 100%;
-    --input-border: 220 20% 75%;
-    --ring: var(--primary);
-
-    /* Popover & Dropdown */
+    
+    /* Text Colors */
+    --text-primary: 0 0% 10%;           /* #1A1A1A */
+    --text-secondary: 0 0% 29%;         /* #4A4A4A */
+    --text-muted: 0 0% 48%;             /* #7A7A7A */
+    
+    /* UI Elements */
+    --card: 40 33% 99%;
+    --card-foreground: 0 0% 10%;
+    --muted: 35 20% 96%;
+    --muted-foreground: 0 0% 48%;
+    
+    --border: 0 0% 90%;                 /* #E5E5E5 */
+    --input: 0 0% 96%;
+    --ring: 153 41% 30%;                /* Primary green */
+    
     --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 12%;
-
-    /* Radius System */
-    --radius: 0.75rem;
-    --radius-lg: 1rem;
-    --radius-xl: 1.5rem;
-
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
-    --gradient-glass: linear-gradient(135deg, hsl(var(--glass-strong)), hsl(var(--glass)));
-    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 50%, hsl(var(--accent)) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(var(--card-glass)), hsl(var(--glass)));
-
-    /* Shadows & Effects */
-    --shadow-glass: 0 8px 32px 0 hsl(var(--primary) / 0.12);
-    --shadow-glow: 0 0 30px hsl(var(--primary) / 0.25);
-    --shadow-card: 0 4px 16px 0 hsl(0 0% 0% / 0.12);
-    --shadow-elevation: 0 10px 40px 0 hsl(0 0% 0% / 0.1);
-
-    /* Animation Variables */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  }
-
-  .dark {
-    /* Brand Colors - Premium Purple & Blue Gradient */
-    --primary: 268 96% 53%;
-    --primary-foreground: 0 0% 100%;
-    --primary-dark: 259 89% 35%;
-    --primary-light: 272 100% 75%;
-
-    /* Secondary - Complementary Teal */
-    --secondary: 185 94% 45%;
-    --secondary-foreground: 0 0% 100%;
-    --secondary-dark: 185 84% 25%;
-    --secondary-light: 185 94% 75%;
-
-    /* Glassmorphism Background System */
-    --background: 220 20% 6%;
-    --background-secondary: 220 15% 10%;
-    --background-tertiary: 220 12% 14%;
-    --foreground: 0 0% 98%;
-
-    /* Glass Card System */
-    --glass: 0 0% 100% / 0.05;
-    --glass-strong: 0 0% 100% / 0.1;
-    --glass-border: 0 0% 100% / 0.1;
-    --glass-glow: var(--primary) / 0.3;
-
-    /* Card & Surface Colors */
-    --card: 220 20% 8%;
-    --card-foreground: 0 0% 95%;
-    --card-glass: 0 0% 100% / 0.08;
-
-    /* Interactive Elements */
-    --accent: 280 100% 70%;
-    --accent-foreground: 0 0% 100%;
-    --muted: 220 15% 18%;
-    --muted-foreground: 220 10% 65%;
-
-    /* Status Colors */
+    --popover-foreground: 0 0% 10%;
+    
+    /* Status Colors (Light Mode) */
     --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-
-    /* Form Elements */
-    --border: 220 15% 20%;
-    --input: 220 15% 15%;
-    --input-border: 220 20% 25%;
-    --ring: var(--primary);
-
-    /* Popover & Dropdown */
-    --popover: 220 20% 8%;
-    --popover-foreground: 0 0% 95%;
-
-    /* Radius System */
+    
+    /* Radius */
     --radius: 0.75rem;
     --radius-lg: 1rem;
     --radius-xl: 1.5rem;
+    
+    /* Shadows - Soft & Warm */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+    
+    /* Transitions */
+    --transition-fast: 150ms;
+    --transition-normal: 300ms;
+    --transition-slow: 500ms;
+  }
 
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
-    --gradient-glass: linear-gradient(135deg, hsl(var(--glass-strong)), hsl(var(--glass)));
-    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 50%, hsl(var(--accent)) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(var(--card-glass)), hsl(var(--glass)));
-
-    /* Shadows & Effects */
-    --shadow-glass: 0 8px 32px 0 hsl(var(--primary) / 0.2);
-    --shadow-glow: 0 0 50px hsl(var(--primary) / 0.4);
-    --shadow-card: 0 4px 16px 0 hsl(0 0% 0% / 0.3);
-    --shadow-elevation: 0 10px 40px 0 hsl(0 0% 0% / 0.2);
-
-    /* Animation Variables */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  /* ========================================
+     DARK MODE (Dashboard)
+     Professional warmth, not cold tech
+     ======================================== */
+  .dark {
+    --background: 220 13% 7%;            /* #0F1115 - Warm black */
+    --background-secondary: 220 11% 11%; /* #1A1D23 */
+    --background-tertiary: 220 10% 15%;  /* #252A33 */
+    --foreground: 0 0% 96%;              /* #F5F5F5 */
+    
+    /* Semantic Dashboard Colors */
+    --primary: 142 71% 45%;              /* Success green for CTAs */
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 243 75% 59%;            /* Interactive purple */
+    --secondary-foreground: 0 0% 100%;
+    
+    --accent: 199 89% 48%;               /* Info blue */
+    --accent-foreground: 0 0% 100%;
+    
+    /* Card & Surface */
+    --card: 220 11% 11%;
+    --card-foreground: 0 0% 96%;
+    --muted: 220 10% 18%;
+    --muted-foreground: 0 0% 69%;
+    
+    --border: 220 10% 18%;
+    --input: 220 11% 14%;
+    --ring: 142 71% 45%;
+    
+    --popover: 220 11% 11%;
+    --popover-foreground: 0 0% 96%;
+    
+    /* Semantic Status Colors (Dashboard) */
+    --success: 142 71% 45%;              /* #4ADE80 - Money/Growth */
+    --success-foreground: 0 0% 100%;
+    --warning: 45 93% 47%;               /* #FCD34D - Attention */
+    --warning-foreground: 0 0% 0%;
+    --destructive: 350 89% 60%;          /* #FB7185 - Errors */
+    --destructive-foreground: 0 0% 100%;
+    --info: 199 89% 48%;                 /* #38BDF8 - Informational */
+    --info-foreground: 0 0% 100%;
+    --interactive: 243 75% 59%;          /* #818CF8 - Links/Actions */
+    --interactive-foreground: 0 0% 100%;
   }
 }
 
@@ -165,52 +129,109 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    background: hsl(var(--background));
-    background-image: 
-      radial-gradient(circle at 20% 80%, hsl(var(--primary) / 0.08) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, hsl(var(--secondary) / 0.08) 0%, transparent 50%),
-      radial-gradient(circle at 40% 40%, hsl(var(--accent) / 0.05) 0%, transparent 50%);
-    min-height: 100vh;
+    font-family: 'DM Sans', system-ui, sans-serif;
   }
 
-  /* Glass Morphism Utilities */
-  .glass {
-    background: linear-gradient(135deg, hsl(var(--glass-strong)), hsl(var(--glass)));
-    backdrop-filter: blur(20px);
-    border: 1px solid hsl(var(--glass-border));
-    box-shadow: var(--shadow-glass);
+  /* Typography */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  
+  .font-display {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+  
+  .font-body {
+    font-family: 'DM Sans', system-ui, sans-serif;
   }
 
-  .glass-strong {
-    background: linear-gradient(135deg, hsl(var(--glass-strong)), hsl(var(--card-glass)));
-    backdrop-filter: blur(25px);
-    border: 1px solid hsl(var(--glass-border));
-    box-shadow: var(--shadow-elevation);
-  }
-
-  .glow-primary {
-    box-shadow: 0 0 30px hsl(var(--primary) / 0.5);
-  }
-
-  .glow-secondary {
-    box-shadow: 0 0 30px hsl(var(--secondary) / 0.5);
-  }
-
-  /* Gradient Text */
-  .gradient-text {
-    background: var(--gradient-primary);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  /* Hero Gradient */
-  .gradient-hero {
-    background: var(--gradient-hero);
-  }
-
-  /* Smooth Scrolling */
+  /* Smooth scrolling */
   html {
     scroll-behavior: smooth;
+  }
+  
+  /* Focus states for accessibility */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+}
+
+@layer components {
+  /* Primary Button - Forest Green */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground;
+    @apply px-6 py-3 rounded-lg font-medium;
+    @apply transition-all duration-300;
+    @apply shadow-md hover:shadow-lg;
+  }
+  
+  .btn-primary:hover {
+    background-color: hsl(153 41% 20%);
+  }
+  
+  /* Secondary Button - Ghost */
+  .btn-secondary {
+    @apply bg-transparent border border-primary text-primary;
+    @apply px-6 py-3 rounded-lg font-medium;
+    @apply transition-all duration-300;
+  }
+  
+  .btn-secondary:hover {
+    background-color: hsl(153 41% 30% / 0.1);
+  }
+  
+  /* Card Styles */
+  .card-warm {
+    @apply bg-card border border-border rounded-xl;
+    @apply shadow-md transition-shadow duration-300;
+  }
+  
+  .card-warm:hover {
+    @apply shadow-lg;
+  }
+  
+  /* Section Backgrounds */
+  .section-light {
+    @apply bg-background;
+  }
+  
+  .section-cream {
+    background-color: hsl(35 43% 97%);
+  }
+  
+  .section-accent {
+    @apply bg-primary text-primary-foreground;
+  }
+  
+  /* Gradient Text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary to-secondary;
+    @apply bg-clip-text text-transparent;
+  }
+  
+  /* Container */
+  .container-max {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
+
+@layer utilities {
+  /* Hover lift effect for cards */
+  .hover-lift {
+    @apply transition-transform duration-300;
+  }
+  .hover-lift:hover {
+    @apply -translate-y-2;
+  }
+  
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
