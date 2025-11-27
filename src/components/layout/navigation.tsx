@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const navigationItems = [
   { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
@@ -59,15 +60,18 @@ export function Navigation() {
       >
         <GlassCard variant="strong" className="h-full p-6 rounded-none lg:rounded-xl m-0 lg:m-4">
           <div className="flex flex-col h-full">
-            {/* Logo */}
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center">
-                <span className="text-white font-bold text-lg">V</span>
+            {/* Logo + Theme Toggle */}
+            <div className="flex items-center justify-between gap-3 mb-8">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">V</span>
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold gradient-text">Veronika</h2>
+                  <p className="text-xs text-muted-foreground">Business MVP</p>
+                </div>
               </div>
-              <div>
-                <h2 className="text-xl font-bold gradient-text">Veronika</h2>
-                <p className="text-xs text-muted-foreground">Business MVP</p>
-              </div>
+              <ThemeToggle />
             </div>
 
             {/* Navigation */}
