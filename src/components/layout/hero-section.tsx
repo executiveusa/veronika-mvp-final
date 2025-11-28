@@ -24,7 +24,7 @@ export function HeroSection() {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: [0.4, 0, 0.2, 1] },
+      transition: { duration: 0.6 },
     },
   };
 
@@ -97,7 +97,7 @@ export function HeroSection() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.4, ease: [0.4, 0, 0.2, 1] }}
+            transition={{ duration: 0.8, delay: 0.4 }}
             className="relative"
           >
             <div className="aspect-[4/5] rounded-2xl overflow-hidden" style={{ background: 'linear-gradient(to bottom right, hsl(153 41% 30% / 0.2), hsl(8 57% 49% / 0.2))' }}>
