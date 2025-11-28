@@ -131,7 +131,10 @@ export default function Expenses() {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
   const thisMonthExpenses = expenses.filter(e => {
+    if (!e.date) return false;
     const expenseDate = new Date(e.date);
+    // Validate that the date is valid
+    if (isNaN(expenseDate.getTime())) return false;
     return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
   }).reduce((sum, e) => sum + Number(e.amount), 0);
 

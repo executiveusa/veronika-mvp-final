@@ -71,7 +71,7 @@ function ProjectCard({ project }: { project: ProjectWithClient }) {
               <div
                 key={member}
                 className="w-6 h-6 rounded-full bg-gradient-primary border-2 border-background flex items-center justify-center"
-                style={{ zIndex: (project.team?.length || 0) - index }}
+                style={{ zIndex: 3 - index }}
               >
                 <span className="text-xs text-white font-medium">
                   {member[0]}

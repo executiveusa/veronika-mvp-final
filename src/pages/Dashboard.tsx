@@ -8,28 +8,32 @@ import { useTranslation } from 'react-i18next';
 import { useClients } from "@/hooks/use-clients";
 import { useProjects } from "@/hooks/use-projects";
 import { useBookings } from "@/hooks/use-bookings";
-import { useExpenses } from "@/hooks/use-expenses";
 
 export default function Dashboard() {
   const { t } = useTranslation('common');
   const { data: clients = [] } = useClients();
   const { data: projects = [] } = useProjects();
   const { data: bookings = [] } = useBookings();
-  const { data: expenses = [] } = useExpenses();
 
   // Calculate stats from real data
   const totalClients = clients.length;
   const activeProjects = projects.filter(p => p.status === "in-progress").length;
   
-  // Calculate monthly revenue from approved/reimbursed expenses (as a proxy for revenue tracking)
+  // Calculate monthly revenue from project budgets (active and completed projects this month)
+  // This represents revenue from ongoing work, not expenses (costs)
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
-  const monthlyExpenses = expenses
-    .filter(e => {
-      const expenseDate = new Date(e.date);
-      return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
+  const monthlyRevenue = projects
+    .filter(p => {
+      // Include active projects and recently completed ones
+      if (p.status === "in-progress" || p.status === "review") return true;
+      if (p.status === "completed" && p.updated_at) {
+        const completedDate = new Date(p.updated_at);
+        return completedDate.getMonth() === currentMonth && completedDate.getFullYear() === currentYear;
+      }
+      return false;
     })
-    .reduce((sum, e) => sum + Number(e.amount), 0);
+    .reduce((sum, p) => sum + Number(p.budget || 0), 0);
 
   // Count upcoming bookings (scheduled or confirmed, future dates)
   const today = new Date();
@@ -58,7 +62,7 @@ export default function Dashboard() {
     },
     {
       titleKey: "monthlyRevenue",
-      value: `$${monthlyExpenses.toLocaleString()}`,
+      value: `$${monthlyRevenue.toLocaleString()}`,
       change: "+18%",
       icon: DollarSign,
       colorClass: "text-[hsl(142,71%,45%)]",

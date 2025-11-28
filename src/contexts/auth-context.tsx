@@ -97,11 +97,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     // If signup successful and user exists, update the profile with name
+    // Note: Profile update errors are logged but not thrown - user creation is still successful
     if (!error && data.user) {
-      await supabase
+      const { error: profileError } = await supabase
         .from("profiles")
         .update({ name })
         .eq("id", data.user.id);
+      
+      if (profileError) {
+        console.error("Error updating profile name:", profileError);
+      }
     }
 
     return { error };
