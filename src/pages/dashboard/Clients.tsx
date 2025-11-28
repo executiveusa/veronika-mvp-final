@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Plus, Search, Filter, MoreHorizontal, Phone, Mail, MapPin } from "lucide-react";
+import { Plus, Search, Filter, MoreHorizontal, Phone, Mail, MapPin, Loader2 } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,58 +14,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useClients } from "@/hooks/use-clients";
+import { useProjects } from "@/hooks/use-projects";
+import { Database } from "@/integrations/supabase/types";
 
-interface Client {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  company: string;
-  status: "active" | "inactive" | "prospect";
+type ClientRow = Database["public"]["Tables"]["clients"]["Row"];
+
+interface ClientDisplay extends ClientRow {
   projects: number;
   revenue: number;
-  location: string;
-  joinDate: string;
 }
-
-const mockClients: Client[] = [
-  {
-    id: "1",
-    name: "John Smith",
-    email: "john@techcorp.com",
-    phone: "+1 (555) 123-4567",
-    company: "TechCorp",
-    status: "active",
-    projects: 3,
-    revenue: 15000,
-    location: "New York, NY",
-    joinDate: "2024-01-15"
-  },
-  {
-    id: "2",
-    name: "Sarah Johnson",
-    email: "sarah@startupxyz.com",
-    phone: "+1 (555) 987-6543",
-    company: "StartupXYZ",
-    status: "active",
-    projects: 2,
-    revenue: 8500,
-    location: "San Francisco, CA",
-    joinDate: "2024-02-20"
-  },
-  {
-    id: "3",
-    name: "Mike Davis",
-    email: "mike@localbiz.com",
-    phone: "+1 (555) 456-7890",
-    company: "LocalBiz",
-    status: "prospect",
-    projects: 0,
-    revenue: 0,
-    location: "Chicago, IL",
-    joinDate: "2024-03-10"
-  },
-];
 
 const statusColors: Record<string, string> = {
   active: "bg-success/20 text-success",
@@ -75,8 +33,21 @@ const statusColors: Record<string, string> = {
 
 export default function Clients() {
   const [searchTerm, setSearchTerm] = useState("");
+  const { data: clients = [], isLoading } = useClients();
+  const { data: projects = [] } = useProjects();
 
-  const columns: ColumnDef<Client>[] = [
+  // Enhance clients with project count and revenue data
+  const clientsWithStats: ClientDisplay[] = clients.map(client => {
+    const clientProjects = projects.filter(p => p.client_id === client.id);
+    const totalRevenue = clientProjects.reduce((sum, p) => sum + Number(p.budget || 0), 0);
+    return {
+      ...client,
+      projects: clientProjects.length,
+      revenue: totalRevenue,
+    };
+  });
+
+  const columns: ColumnDef<ClientDisplay>[] = [
     {
       accessorKey: "name",
       header: "Client",
@@ -91,7 +62,7 @@ export default function Clients() {
             </div>
             <div>
               <div className="font-medium text-card-foreground">{client.name}</div>
-              <div className="text-sm text-muted-foreground">{client.company}</div>
+              <div className="text-sm text-muted-foreground">{client.company || "No company"}</div>
             </div>
           </div>
         );
@@ -106,11 +77,11 @@ export default function Clients() {
           <div className="space-y-1">
             <div className="flex items-center gap-2 text-sm">
               <Mail className="h-3 w-3 text-muted-foreground" />
-              <span className="text-card-foreground">{client.email}</span>
+              <span className="text-card-foreground">{client.email || "No email"}</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Phone className="h-3 w-3 text-muted-foreground" />
-              <span className="text-muted-foreground">{client.phone}</span>
+              <span className="text-muted-foreground">{client.phone || "No phone"}</span>
             </div>
           </div>
         );
@@ -132,8 +103,8 @@ export default function Clients() {
       accessorKey: "projects",
       header: "Projects",
       cell: ({ row }) => {
-        const projects = row.getValue("projects") as number;
-        return <span className="font-medium text-card-foreground">{projects}</span>;
+        const projectCount = row.getValue("projects") as number;
+        return <span className="font-medium text-card-foreground">{projectCount}</span>;
       },
     },
     {
@@ -156,14 +127,14 @@ export default function Clients() {
         return (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <MapPin className="h-3 w-3" />
-            {location}
+            {location || "No location"}
           </div>
         );
       },
     },
     {
       id: "actions",
-      cell: ({ row }) => {
+      cell: () => {
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -183,11 +154,27 @@ export default function Clients() {
     },
   ];
 
-  const filteredClients = mockClients.filter(client =>
+  const filteredClients = clientsWithStats.filter(client =>
     client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    client.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    client.email.toLowerCase().includes(searchTerm.toLowerCase())
+    (client.company?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false) ||
+    (client.email?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false)
   );
+
+  // Calculate stats
+  const totalClients = clients.length;
+  const activeClients = clients.filter(c => c.status === "active").length;
+  const prospectClients = clients.filter(c => c.status === "prospect").length;
+  const totalRevenue = clientsWithStats.reduce((sum, c) => sum + c.revenue, 0);
+
+  if (isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -221,7 +208,7 @@ export default function Clients() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total Clients</p>
-                <p className="text-2xl font-bold text-card-foreground">24</p>
+                <p className="text-2xl font-bold text-card-foreground">{totalClients}</p>
               </div>
               <div className="p-3 rounded-lg bg-primary/20">
                 <Phone className="h-6 w-6 text-primary" />
@@ -233,7 +220,7 @@ export default function Clients() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Active</p>
-                <p className="text-2xl font-bold text-success">18</p>
+                <p className="text-2xl font-bold text-success">{activeClients}</p>
               </div>
               <div className="p-3 rounded-lg bg-success/20">
                 <Phone className="h-6 w-6 text-success" />
@@ -245,7 +232,7 @@ export default function Clients() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Prospects</p>
-                <p className="text-2xl font-bold text-warning">4</p>
+                <p className="text-2xl font-bold text-warning">{prospectClients}</p>
               </div>
               <div className="p-3 rounded-lg bg-warning/20">
                 <Phone className="h-6 w-6 text-warning" />
@@ -257,7 +244,7 @@ export default function Clients() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total Revenue</p>
-                <p className="text-2xl font-bold text-primary">$47,200</p>
+                <p className="text-2xl font-bold text-primary">${totalRevenue.toLocaleString()}</p>
               </div>
               <div className="p-3 rounded-lg bg-primary/20">
                 <Phone className="h-6 w-6 text-primary" />
@@ -302,7 +289,15 @@ export default function Clients() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          <DataTable columns={columns} data={filteredClients} />
+          {filteredClients.length > 0 ? (
+            <DataTable columns={columns} data={filteredClients} />
+          ) : (
+            <GlassCard variant="strong" className="p-12 text-center">
+              <p className="text-muted-foreground">
+                {searchTerm ? "No clients found matching your search." : "No clients yet. Add your first client!"}
+              </p>
+            </GlassCard>
+          )}
         </motion.div>
       </div>
     </DashboardLayout>

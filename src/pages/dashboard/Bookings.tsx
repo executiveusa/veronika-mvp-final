@@ -1,80 +1,15 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Plus, Calendar, Clock, User, Phone, Mail, MapPin } from "lucide-react";
+import { Plus, Calendar, Clock, User, Phone, Mail, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/ui/glass-card";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useBookings } from "@/hooks/use-bookings";
+import { Database } from "@/integrations/supabase/types";
 
-interface Booking {
-  id: string;
-  clientName: string;
-  clientEmail: string;
-  clientPhone: string;
-  service: string;
-  date: string;
-  time: string;
-  duration: number;
-  status: "scheduled" | "confirmed" | "completed" | "cancelled";
-  notes?: string;
-  source: "website" | "referral" | "direct" | "social";
-}
-
-const mockBookings: Booking[] = [
-  {
-    id: "1",
-    clientName: "Alice Johnson",
-    clientEmail: "alice@example.com",
-    clientPhone: "+1 (555) 123-4567",
-    service: "Web Design Consultation",
-    date: "2024-03-20",
-    time: "10:00",
-    duration: 60,
-    status: "confirmed",
-    notes: "Interested in e-commerce website",
-    source: "website"
-  },
-  {
-    id: "2",
-    clientName: "Bob Smith",
-    clientEmail: "bob@company.com",
-    clientPhone: "+1 (555) 987-6543",
-    service: "Brand Strategy Session",
-    date: "2024-03-21",
-    time: "14:00",
-    duration: 90,
-    status: "scheduled",
-    notes: "New startup looking for complete rebrand",
-    source: "referral"
-  },
-  {
-    id: "3",
-    clientName: "Carol Davis",
-    clientEmail: "carol@business.com",
-    clientPhone: "+1 (555) 456-7890",
-    service: "Project Discovery Call",
-    date: "2024-03-19",
-    time: "11:00",
-    duration: 45,
-    status: "completed",
-    notes: "Mobile app development project",
-    source: "direct"
-  },
-  {
-    id: "4",
-    clientName: "David Wilson",
-    clientEmail: "david@startup.io",
-    clientPhone: "+1 (555) 321-0987",
-    service: "Technical Consultation",
-    date: "2024-03-22",
-    time: "15:30",
-    duration: 60,
-    status: "scheduled",
-    notes: "Architecture review needed",
-    source: "social"
-  }
-];
+type BookingRow = Database["public"]["Tables"]["bookings"]["Row"];
 
 const statusColors: Record<string, string> = {
   scheduled: "bg-muted/20 text-muted-foreground",
@@ -90,7 +25,7 @@ const sourceColors: Record<string, string> = {
   social: "bg-accent/20 text-accent"
 };
 
-function BookingCard({ booking }: { booking: Booking }) {
+function BookingCard({ booking }: { booking: BookingRow }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -102,7 +37,7 @@ function BookingCard({ booking }: { booking: Booking }) {
         <div className="space-y-4">
           <div className="flex items-start justify-between">
             <div>
-              <h4 className="font-semibold text-card-foreground text-lg">{booking.clientName}</h4>
+              <h4 className="font-semibold text-card-foreground text-lg">{booking.client_name}</h4>
               <p className="text-primary font-medium">{booking.service}</p>
             </div>
             <div className="flex gap-2">
@@ -127,14 +62,18 @@ function BookingCard({ booking }: { booking: Booking }) {
           </div>
 
           <div className="space-y-2 text-sm">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Mail className="h-4 w-4" />
-              <span>{booking.clientEmail}</span>
-            </div>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Phone className="h-4 w-4" />
-              <span>{booking.clientPhone}</span>
-            </div>
+            {booking.client_email && (
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Mail className="h-4 w-4" />
+                <span>{booking.client_email}</span>
+              </div>
+            )}
+            {booking.client_phone && (
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Phone className="h-4 w-4" />
+                <span>{booking.client_phone}</span>
+              </div>
+            )}
           </div>
 
           {booking.notes && (
@@ -164,13 +103,26 @@ function BookingCard({ booking }: { booking: Booking }) {
 
 export default function Bookings() {
   const [view, setView] = useState<"upcoming" | "past" | "all">("upcoming");
+  const { data: bookings = [], isLoading } = useBookings();
 
-  const today = new Date();
-  const upcomingBookings = mockBookings.filter(b => 
-    new Date(b.date) >= today && (b.status === "scheduled" || b.status === "confirmed")
+  const today = useMemo(() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }, []);
+
+  const upcomingBookings = useMemo(() => 
+    bookings.filter(b => 
+      new Date(b.date) >= today && (b.status === "scheduled" || b.status === "confirmed")
+    ),
+    [bookings, today]
   );
-  const pastBookings = mockBookings.filter(b => 
-    new Date(b.date) < today || b.status === "completed"
+
+  const pastBookings = useMemo(() => 
+    bookings.filter(b => 
+      new Date(b.date) < today || b.status === "completed"
+    ),
+    [bookings, today]
   );
 
   const getBookingsForView = () => {
@@ -180,13 +132,23 @@ export default function Bookings() {
       case "past":
         return pastBookings;
       default:
-        return mockBookings;
+        return bookings;
     }
   };
 
-  const totalBookings = mockBookings.length;
-  const confirmedBookings = mockBookings.filter(b => b.status === "confirmed").length;
-  const completedBookings = mockBookings.filter(b => b.status === "completed").length;
+  const totalBookings = bookings.length;
+  const confirmedBookings = bookings.filter(b => b.status === "confirmed").length;
+  const completedBookings = bookings.filter(b => b.status === "completed").length;
+
+  if (isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>

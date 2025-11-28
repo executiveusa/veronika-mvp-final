@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Plus, Search, Filter, Download, Receipt, Calendar } from "lucide-react";
+import { Plus, Search, Filter, Download, Receipt, Calendar, Loader2 } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,61 +8,14 @@ import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/ui/glass-card";
 import { DataTable } from "@/components/ui/data-table";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
+import { useExpenses } from "@/hooks/use-expenses";
+import { Database } from "@/integrations/supabase/types";
 
-interface Expense {
-  id: string;
-  description: string;
-  amount: number;
-  category: string;
-  date: string;
-  client?: string;
-  project?: string;
-  status: "pending" | "approved" | "reimbursed";
-  receipt: boolean;
-}
-
-const mockExpenses: Expense[] = [
-  {
-    id: "1",
-    description: "Office supplies and equipment",
-    amount: 450.00,
-    category: "Office",
-    date: "2024-03-15",
-    status: "approved",
-    receipt: true
-  },
-  {
-    id: "2",
-    description: "Client meeting lunch",
-    amount: 85.50,
-    category: "Meals",
-    date: "2024-03-14",
-    client: "TechCorp",
-    project: "Website Redesign",
-    status: "reimbursed",
-    receipt: true
-  },
-  {
-    id: "3",
-    description: "Software license renewal",
-    amount: 299.99,
-    category: "Software",
-    date: "2024-03-12",
-    status: "pending",
-    receipt: false
-  },
-  {
-    id: "4",
-    description: "Travel expenses for client meeting",
-    amount: 180.00,
-    category: "Travel",
-    date: "2024-03-10",
-    client: "StartupXYZ",
-    project: "Mobile App",
-    status: "approved",
-    receipt: true
-  }
-];
+type ExpenseRow = Database["public"]["Tables"]["expenses"]["Row"];
+type ExpenseWithRelations = ExpenseRow & { 
+  clients: { name: string } | null; 
+  projects: { name: string } | null;
+};
 
 const statusColors: Record<string, string> = {
   pending: "bg-warning/20 text-warning",
@@ -79,8 +32,9 @@ const categoryColors: Record<string, string> = {
 
 export default function Expenses() {
   const [searchTerm, setSearchTerm] = useState("");
+  const { data: expenses = [], isLoading } = useExpenses();
 
-  const columns: ColumnDef<Expense>[] = [
+  const columns: ColumnDef<ExpenseWithRelations>[] = [
     {
       accessorKey: "description",
       header: "Description",
@@ -89,9 +43,9 @@ export default function Expenses() {
         return (
           <div>
             <div className="font-medium text-card-foreground">{expense.description}</div>
-            {expense.client && (
+            {expense.clients && (
               <div className="text-sm text-muted-foreground">
-                {expense.client} {expense.project && `• ${expense.project}`}
+                {expense.clients.name} {expense.projects && `• ${expense.projects.name}`}
               </div>
             )}
           </div>
@@ -105,7 +59,7 @@ export default function Expenses() {
         const amount = row.getValue("amount") as number;
         return (
           <span className="font-semibold text-card-foreground">
-            ${amount.toFixed(2)}
+            ${Number(amount).toFixed(2)}
           </span>
         );
       },
@@ -117,7 +71,7 @@ export default function Expenses() {
         const category = row.getValue("category") as string;
         return (
           <Badge className={categoryColors[category] || categoryColors.Office}>
-            {category}
+            {category || "Other"}
           </Badge>
         );
       },
@@ -164,16 +118,32 @@ export default function Expenses() {
     },
   ];
 
-  const filteredExpenses = mockExpenses.filter(expense =>
+  const filteredExpenses = expenses.filter(expense =>
     expense.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    expense.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    expense.client?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    expense.project?.toLowerCase().includes(searchTerm.toLowerCase())
+    (expense.category?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false) ||
+    (expense.clients?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false) ||
+    (expense.projects?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false)
   );
 
-  const totalExpenses = mockExpenses.reduce((sum, expense) => sum + expense.amount, 0);
-  const pendingExpenses = mockExpenses.filter(e => e.status === "pending").reduce((sum, expense) => sum + expense.amount, 0);
-  const reimbursedExpenses = mockExpenses.filter(e => e.status === "reimbursed").reduce((sum, expense) => sum + expense.amount, 0);
+  const totalExpenses = expenses.reduce((sum, expense) => sum + Number(expense.amount), 0);
+  const pendingExpenses = expenses.filter(e => e.status === "pending").reduce((sum, expense) => sum + Number(expense.amount), 0);
+  const reimbursedExpenses = expenses.filter(e => e.status === "reimbursed").reduce((sum, expense) => sum + Number(expense.amount), 0);
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+  const thisMonthExpenses = expenses.filter(e => {
+    const expenseDate = new Date(e.date);
+    return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
+  }).reduce((sum, e) => sum + Number(e.amount), 0);
+
+  if (isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -250,9 +220,7 @@ export default function Expenses() {
               <div>
                 <p className="text-sm text-muted-foreground">This Month</p>
                 <p className="text-2xl font-bold text-primary">
-                  ${mockExpenses.filter(e => 
-                    new Date(e.date).getMonth() === new Date().getMonth()
-                  ).reduce((sum, e) => sum + e.amount, 0).toLocaleString()}
+                  ${thisMonthExpenses.toLocaleString()}
                 </p>
               </div>
               <div className="p-3 rounded-lg bg-primary/20">
@@ -299,7 +267,15 @@ export default function Expenses() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          <DataTable columns={columns} data={filteredExpenses} />
+          {filteredExpenses.length > 0 ? (
+            <DataTable columns={columns} data={filteredExpenses} />
+          ) : (
+            <GlassCard variant="strong" className="p-12 text-center">
+              <p className="text-muted-foreground">
+                {searchTerm ? "No expenses found matching your search." : "No expenses yet. Add your first expense!"}
+              </p>
+            </GlassCard>
+          )}
         </motion.div>
       </div>
     </DashboardLayout>

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Plus, Search, Filter, Calendar, Users, DollarSign } from "lucide-react";
+import { Plus, Search, Filter, Calendar, Users, DollarSign, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -8,70 +8,11 @@ import { Progress } from "@/components/ui/progress";
 import { GlassCard } from "@/components/ui/glass-card";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useProjects } from "@/hooks/use-projects";
+import { Database } from "@/integrations/supabase/types";
 
-interface Project {
-  id: string;
-  name: string;
-  client: string;
-  status: "planning" | "in-progress" | "review" | "completed";
-  progress: number;
-  budget: number;
-  spent: number;
-  deadline: string;
-  team: string[];
-  description: string;
-}
-
-const mockProjects: Project[] = [
-  {
-    id: "1",
-    name: "Website Redesign",
-    client: "TechCorp",
-    status: "in-progress",
-    progress: 75,
-    budget: 15000,
-    spent: 11250,
-    deadline: "2024-04-15",
-    team: ["John", "Sarah", "Mike"],
-    description: "Complete website overhaul with modern design and improved UX"
-  },
-  {
-    id: "2",
-    name: "Mobile App Development",
-    client: "StartupXYZ",
-    status: "in-progress",
-    progress: 45,
-    budget: 25000,
-    spent: 12500,
-    deadline: "2024-05-30",
-    team: ["Alice", "Bob"],
-    description: "Native iOS and Android app for customer engagement"
-  },
-  {
-    id: "3",
-    name: "Brand Identity",
-    client: "LocalBiz",
-    status: "review",
-    progress: 90,
-    budget: 8000,
-    spent: 7200,
-    deadline: "2024-03-30",
-    team: ["Emily", "David"],
-    description: "Complete brand refresh including logo, colors, and guidelines"
-  },
-  {
-    id: "4",
-    name: "E-commerce Platform",
-    client: "RetailCo",
-    status: "planning",
-    progress: 15,
-    budget: 35000,
-    spent: 5250,
-    deadline: "2024-07-15",
-    team: ["Tom", "Lisa", "James"],
-    description: "Custom e-commerce solution with inventory management"
-  }
-];
+type ProjectRow = Database["public"]["Tables"]["projects"]["Row"];
+type ProjectWithClient = ProjectRow & { clients: { name: string } | null };
 
 const statusColors: Record<string, string> = {
   planning: "bg-muted/20 text-muted-foreground",
@@ -80,14 +21,7 @@ const statusColors: Record<string, string> = {
   completed: "bg-success/20 text-success"
 };
 
-const statusColumns = {
-  planning: mockProjects.filter(p => p.status === "planning"),
-  "in-progress": mockProjects.filter(p => p.status === "in-progress"),
-  review: mockProjects.filter(p => p.status === "review"),
-  completed: mockProjects.filter(p => p.status === "completed")
-};
-
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({ project }: { project: ProjectWithClient }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -105,12 +39,12 @@ function ProjectCard({ project }: { project: Project }) {
           </div>
           
           <p className="text-sm text-muted-foreground line-clamp-2">
-            {project.description}
+            {project.description || "No description"}
           </p>
           
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Users className="h-3 w-3" />
-            <span>{project.client}</span>
+            <span>{project.clients?.name || "No client"}</span>
           </div>
           
           <div className="space-y-2">
@@ -124,29 +58,29 @@ function ProjectCard({ project }: { project: Project }) {
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-1 text-muted-foreground">
               <Calendar className="h-3 w-3" />
-              <span>{new Date(project.deadline).toLocaleDateString()}</span>
+              <span>{project.deadline ? new Date(project.deadline).toLocaleDateString() : "No deadline"}</span>
             </div>
             <div className="flex items-center gap-1 text-success">
               <DollarSign className="h-3 w-3" />
-              <span>${project.spent.toLocaleString()}</span>
+              <span>${Number(project.spent || 0).toLocaleString()}</span>
             </div>
           </div>
           
           <div className="flex -space-x-2">
-            {project.team.slice(0, 3).map((member, index) => (
+            {(project.team || []).slice(0, 3).map((member, index) => (
               <div
                 key={member}
                 className="w-6 h-6 rounded-full bg-gradient-primary border-2 border-background flex items-center justify-center"
-                style={{ zIndex: project.team.length - index }}
+                style={{ zIndex: (project.team?.length || 0) - index }}
               >
                 <span className="text-xs text-white font-medium">
                   {member[0]}
                 </span>
               </div>
             ))}
-            {project.team.length > 3 && (
+            {(project.team?.length || 0) > 3 && (
               <div className="w-6 h-6 rounded-full bg-muted border-2 border-background flex items-center justify-center text-xs text-muted-foreground">
-                +{project.team.length - 3}
+                +{(project.team?.length || 0) - 3}
               </div>
             )}
           </div>
@@ -159,6 +93,26 @@ function ProjectCard({ project }: { project: Project }) {
 export default function Projects() {
   const [searchTerm, setSearchTerm] = useState("");
   const [view, setView] = useState<"kanban" | "list">("kanban");
+  const { data: projects = [], isLoading } = useProjects();
+
+  const statusColumns = useMemo(() => ({
+    planning: projects.filter(p => p.status === "planning"),
+    "in-progress": projects.filter(p => p.status === "in-progress"),
+    review: projects.filter(p => p.status === "review"),
+    completed: projects.filter(p => p.status === "completed")
+  }), [projects]);
+
+  const totalBudget = projects.reduce((sum, p) => sum + Number(p.budget || 0), 0);
+
+  if (isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -193,7 +147,7 @@ export default function Projects() {
               <div>
                 <p className="text-sm text-muted-foreground">Total Projects</p>
                 <p className="text-2xl font-bold text-card-foreground">
-                  {mockProjects.length}
+                  {projects.length}
                 </p>
               </div>
               <div className="p-3 rounded-lg bg-primary/20">
@@ -235,7 +189,7 @@ export default function Projects() {
               <div>
                 <p className="text-sm text-muted-foreground">Total Budget</p>
                 <p className="text-2xl font-bold text-primary">
-                  ${mockProjects.reduce((sum, p) => sum + p.budget, 0).toLocaleString()}
+                  ${totalBudget.toLocaleString()}
                 </p>
               </div>
               <div className="p-3 rounded-lg bg-primary/20">
@@ -286,43 +240,55 @@ export default function Projects() {
         >
           <Tabs value={view} className="space-y-6">
             <TabsContent value="kanban" className="space-y-0">
-              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                {Object.entries(statusColumns).map(([status, projects]) => (
-                  <div key={status} className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-semibold text-card-foreground capitalize">
-                        {status.replace("-", " ")}
-                      </h3>
-                      <Badge variant="outline" className="glass border-glass-border">
-                        {projects.length}
-                      </Badge>
+              {projects.length > 0 ? (
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                  {Object.entries(statusColumns).map(([status, projectList]) => (
+                    <div key={status} className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-semibold text-card-foreground capitalize">
+                          {status.replace("-", " ")}
+                        </h3>
+                        <Badge variant="outline" className="glass border-glass-border">
+                          {projectList.length}
+                        </Badge>
+                      </div>
+                      <div className="space-y-3">
+                        {projectList
+                          .filter(project =>
+                            project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            (project.clients?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false)
+                          )
+                          .map((project) => (
+                            <ProjectCard key={project.id} project={project} />
+                          ))}
+                      </div>
                     </div>
-                    <div className="space-y-3">
-                      {projects
-                        .filter(project =>
-                          project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          project.client.toLowerCase().includes(searchTerm.toLowerCase())
-                        )
-                        .map((project) => (
-                          <ProjectCard key={project.id} project={project} />
-                        ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <GlassCard variant="strong" className="p-12 text-center">
+                  <p className="text-muted-foreground">No projects yet. Create your first project!</p>
+                </GlassCard>
+              )}
             </TabsContent>
             
             <TabsContent value="list">
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {mockProjects
-                  .filter(project =>
-                    project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    project.client.toLowerCase().includes(searchTerm.toLowerCase())
-                  )
-                  .map((project) => (
-                    <ProjectCard key={project.id} project={project} />
-                  ))}
-              </div>
+              {projects.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {projects
+                    .filter(project =>
+                      project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                      (project.clients?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false)
+                    )
+                    .map((project) => (
+                      <ProjectCard key={project.id} project={project} />
+                    ))}
+                </div>
+              ) : (
+                <GlassCard variant="strong" className="p-12 text-center">
+                  <p className="text-muted-foreground">No projects yet. Create your first project!</p>
+                </GlassCard>
+              )}
             </TabsContent>
           </Tabs>
         </motion.div>

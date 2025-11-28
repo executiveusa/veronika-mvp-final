@@ -14,7 +14,269 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          id: string
+          name: string | null
+          email: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          name?: string | null
+          email?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string | null
+          email?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      clients: {
+        Row: {
+          id: string
+          user_id: string
+          name: string
+          email: string | null
+          phone: string | null
+          company: string | null
+          location: string | null
+          status: "active" | "inactive" | "prospect"
+          join_date: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          name: string
+          email?: string | null
+          phone?: string | null
+          company?: string | null
+          location?: string | null
+          status?: "active" | "inactive" | "prospect"
+          join_date?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          name?: string
+          email?: string | null
+          phone?: string | null
+          company?: string | null
+          location?: string | null
+          status?: "active" | "inactive" | "prospect"
+          join_date?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clients_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      projects: {
+        Row: {
+          id: string
+          user_id: string
+          client_id: string | null
+          name: string
+          description: string | null
+          status: "planning" | "in-progress" | "review" | "completed"
+          progress: number
+          budget: number | null
+          spent: number | null
+          deadline: string | null
+          team: string[] | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          client_id?: string | null
+          name: string
+          description?: string | null
+          status?: "planning" | "in-progress" | "review" | "completed"
+          progress?: number
+          budget?: number | null
+          spent?: number | null
+          deadline?: string | null
+          team?: string[] | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          client_id?: string | null
+          name?: string
+          description?: string | null
+          status?: "planning" | "in-progress" | "review" | "completed"
+          progress?: number
+          budget?: number | null
+          spent?: number | null
+          deadline?: string | null
+          team?: string[] | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projects_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projects_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      expenses: {
+        Row: {
+          id: string
+          user_id: string
+          client_id: string | null
+          project_id: string | null
+          description: string
+          amount: number
+          category: string | null
+          date: string
+          status: "pending" | "approved" | "reimbursed"
+          receipt: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          client_id?: string | null
+          project_id?: string | null
+          description: string
+          amount: number
+          category?: string | null
+          date: string
+          status?: "pending" | "approved" | "reimbursed"
+          receipt?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          client_id?: string | null
+          project_id?: string | null
+          description?: string
+          amount?: number
+          category?: string | null
+          date?: string
+          status?: "pending" | "approved" | "reimbursed"
+          receipt?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      bookings: {
+        Row: {
+          id: string
+          user_id: string
+          client_name: string
+          client_email: string | null
+          client_phone: string | null
+          service: string
+          date: string
+          time: string
+          duration: number
+          status: "scheduled" | "confirmed" | "completed" | "cancelled"
+          notes: string | null
+          source: "website" | "referral" | "direct" | "social"
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          client_name: string
+          client_email?: string | null
+          client_phone?: string | null
+          service: string
+          date: string
+          time: string
+          duration?: number
+          status?: "scheduled" | "confirmed" | "completed" | "cancelled"
+          notes?: string | null
+          source?: "website" | "referral" | "direct" | "social"
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          client_name?: string
+          client_email?: string | null
+          client_phone?: string | null
+          service?: string
+          date?: string
+          time?: string
+          duration?: number
+          status?: "scheduled" | "confirmed" | "completed" | "cancelled"
+          notes?: string | null
+          source?: "website" | "referral" | "direct" | "social"
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +285,11 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      client_status: "active" | "inactive" | "prospect"
+      project_status: "planning" | "in-progress" | "review" | "completed"
+      expense_status: "pending" | "approved" | "reimbursed"
+      booking_status: "scheduled" | "confirmed" | "completed" | "cancelled"
+      booking_source: "website" | "referral" | "direct" | "social"
     }
     CompositeTypes: {
       [_ in never]: never
