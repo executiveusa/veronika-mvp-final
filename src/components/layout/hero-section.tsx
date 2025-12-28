@@ -267,44 +267,17 @@ export function HeroSection() {
                   backdropFilter: 'blur(20px)'
                 }}
               >
-                {/* Placeholder with elegant styling */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
-                  <motion.div
-                    animate={{ 
-                      boxShadow: [
-                        '0 0 20px rgba(74, 222, 128, 0.3)',
-                        '0 0 40px rgba(74, 222, 128, 0.5)',
-                        '0 0 20px rgba(74, 222, 128, 0.3)'
-                      ]
-                    }}
-                    transition={{ duration: 3, repeat: Infinity }}
-                    className="w-32 h-32 rounded-full mb-6 flex items-center justify-center"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(45, 106, 79, 0.5) 0%, rgba(99, 102, 241, 0.3) 100%)',
-                      border: '2px solid rgba(74, 222, 128, 0.4)'
-                    }}
-                  >
-                    <span className="text-5xl font-display font-bold text-white">V</span>
-                  </motion.div>
-                  <span 
-                    className="text-lg font-medium text-center"
-                    style={{ color: 'rgba(226, 232, 240, 0.9)' }}
-                  >
-                    Photo of Veronika
-                  </span>
-                  <span 
-                    className="text-sm mt-2 text-center"
-                    style={{ color: 'rgba(226, 232, 240, 0.5)' }}
-                  >
-                    Strategic Business Consultant
-                  </span>
-                </div>
-                
-                {/* Subtle shine effect */}
+                {/* Profile Photo */}
+                <img 
+                  src="https://media.licdn.com/dms/image/v2/D5603AQHTx_PwHFN-9A/profile-displayphoto-crop_800_800/B56Ze1GQvOH8AI-/0/1751090007321?e=1768435200&v=beta&t=cfMMXrGdWVnwhucI95Vt_fZ1Tnb1NjZdeMhIMjMzpTU"
+                  alt="Veronika Dimitrova - Strategic Business Consultant"
+                  className="absolute inset-0 w-full h-full object-cover object-center"
+                />
+                {/* Subtle overlay for depth */}
                 <div 
                   className="absolute inset-0 pointer-events-none"
                   style={{
-                    background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, transparent 100%)'
+                    background: 'linear-gradient(to top, rgba(15, 23, 42, 0.4) 0%, transparent 40%)'
                   }}
                 />
               </div>

@@ -206,27 +206,21 @@ const Index = () => {
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
                 style={{ 
-                  background: 'linear-gradient(135deg, #2D6A4F 0%, #40916C 50%, #84A98C 100%)',
                   boxShadow: '0 25px 50px -12px rgba(45, 106, 79, 0.3)'
                 }}
               >
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
-                  <motion.div
-                    animate={{ 
-                      boxShadow: [
-                        '0 0 30px rgba(255, 255, 255, 0.2)',
-                        '0 0 60px rgba(255, 255, 255, 0.4)',
-                        '0 0 30px rgba(255, 255, 255, 0.2)'
-                      ]
-                    }}
-                    transition={{ duration: 3, repeat: Infinity }}
-                    className="w-24 h-24 rounded-full mb-4 flex items-center justify-center"
-                    style={{ background: 'rgba(255, 255, 255, 0.2)', border: '2px solid rgba(255, 255, 255, 0.3)' }}
-                  >
-                    <span className="text-4xl font-display font-bold text-white">V</span>
-                  </motion.div>
-                  <span className="text-white/90 font-medium">About Photo</span>
-                </div>
+                <img 
+                  src="https://media.licdn.com/dms/image/v2/D5603AQHTx_PwHFN-9A/profile-displayphoto-crop_800_800/B56Ze1GQvOH8AI-/0/1751090007321?e=1768435200&v=beta&t=cfMMXrGdWVnwhucI95Vt_fZ1Tnb1NjZdeMhIMjMzpTU"
+                  alt="Veronika Dimitrova - Strategic Business Consultant"
+                  className="absolute inset-0 w-full h-full object-cover object-center"
+                />
+                {/* Subtle overlay for depth */}
+                <div 
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: 'linear-gradient(to top, rgba(45, 106, 79, 0.3) 0%, transparent 50%)'
+                  }}
+                />
               </motion.div>
               
               {/* Decorative elements */}
