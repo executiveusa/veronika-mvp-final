@@ -3,7 +3,7 @@ builder = "nixpacks"
 watchPatterns = ["src/**", "public/**", "package.json"]
 
 [deploy]
-startCommand = "caddy file-server --root dist --listen :8080"
+startCommand = "npm run build && caddy file-server --root dist --listen :8080"
 restartPolicyMaxRetries = 5
 restartPolicyWindow = 60
 

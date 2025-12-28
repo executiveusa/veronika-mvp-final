@@ -4,13 +4,13 @@
     "builder": "nixpacks"
   },
   "deploy": {
-    "startCommand": "caddy file-server --root dist --listen :8080",
+    "startCommand": "npm run build && caddy file-server --root dist --listen :8080",
     "restartPolicyMaxRetries": 5,
     "restartPolicyWindow": 60,
     "healthchecks": {
       "enabled": true,
-      "interval": 10,
-      "timeout": 5
+      "interval": 30,
+      "timeout": 10
     }
   },
   "environments": {
