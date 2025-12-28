@@ -15,7 +15,6 @@ import {
   ChevronRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { GlassCard } from "@/components/ui/glass-card";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
@@ -38,14 +37,21 @@ export function Navigation() {
     <>
       {/* Mobile Menu Button */}
       <div className="lg:hidden fixed top-4 left-4 z-50">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setIsOpen(!isOpen)}
-          className="glass border-glass-border"
-        >
-          {isOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-        </Button>
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsOpen(!isOpen)}
+            className="border-0"
+            style={{
+              background: 'rgba(255, 255, 255, 0.1)',
+              color: 'white',
+              backdropFilter: 'blur(10px)'
+            }}
+          >
+            {isOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </Button>
+        </motion.div>
       </div>
 
       {/* Sidebar */}
@@ -58,24 +64,45 @@ export function Navigation() {
           "lg:translate-x-0"
         )}
       >
-        <GlassCard variant="strong" className="h-full p-6 rounded-none lg:rounded-xl m-0 lg:m-4">
+        <div 
+          className="h-full p-6 rounded-none lg:rounded-2xl m-0 lg:m-4"
+          style={{
+            background: 'rgba(255, 255, 255, 0.03)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            backdropFilter: 'blur(20px)'
+          }}
+        >
           <div className="flex flex-col h-full">
             {/* Logo + Theme Toggle */}
             <div className="flex items-center justify-between gap-3 mb-8">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center">
+                <motion.div 
+                  className="w-10 h-10 rounded-xl flex items-center justify-center"
+                  style={{ background: 'linear-gradient(135deg, #2D6A4F 0%, #40916C 100%)' }}
+                  whileHover={{ scale: 1.05, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
                   <span className="text-white font-bold text-lg">V</span>
-                </div>
+                </motion.div>
                 <div>
-                  <h2 className="text-xl font-bold gradient-text">Veronika</h2>
-                  <p className="text-xs text-muted-foreground">Business MVP</p>
+                  <h2 
+                    className="text-xl font-bold"
+                    style={{
+                      background: 'linear-gradient(135deg, #FFFFFF 0%, rgba(226, 232, 240, 0.8) 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent'
+                    }}
+                  >
+                    Veronika
+                  </h2>
+                  <p className="text-xs" style={{ color: 'rgba(226, 232, 240, 0.5)' }}>Business MVP</p>
                 </div>
               </div>
               <ThemeToggle />
             </div>
 
             {/* Navigation */}
-            <nav className="flex-1 space-y-2">
+            <nav className="flex-1 space-y-1">
               {navigationItems.map((item) => {
                 const isActive = location.pathname === item.href;
                 return (
@@ -83,40 +110,62 @@ export function Navigation() {
                     key={item.name}
                     to={item.href}
                     onClick={() => setIsOpen(false)}
-                    className={cn(
-                      "flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 group relative",
-                      isActive
-                        ? "bg-primary/20 text-primary border border-primary/30"
-                        : "hover:bg-glass/50 text-card-foreground hover:text-primary"
-                    )}
                   >
-                    <item.icon className="h-5 w-5" />
-                    <span className="font-medium">{item.name}</span>
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeIndicator"
-                        className="absolute right-3"
-                      >
-                        <ChevronRight className="h-4 w-4" />
-                      </motion.div>
-                    )}
+                    <motion.div
+                      whileHover={{ x: 4 }}
+                      className={cn(
+                        "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group relative"
+                      )}
+                      style={{
+                        background: isActive 
+                          ? 'rgba(45, 106, 79, 0.2)' 
+                          : 'transparent',
+                        border: isActive 
+                          ? '1px solid rgba(45, 106, 79, 0.3)' 
+                          : '1px solid transparent',
+                        color: isActive ? '#4ADE80' : 'rgba(226, 232, 240, 0.8)'
+                      }}
+                    >
+                      <item.icon className="h-5 w-5" />
+                      <span className="font-medium">{item.name}</span>
+                      {isActive && (
+                        <motion.div
+                          layoutId="activeIndicator"
+                          className="absolute right-3"
+                        >
+                          <ChevronRight className="h-4 w-4" />
+                        </motion.div>
+                      )}
+                    </motion.div>
                   </Link>
                 );
               })}
             </nav>
 
             {/* User Profile */}
-            <div className="pt-6 border-t border-glass-border">
-              <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-glass/50 transition-colors cursor-pointer">
-                <div className="w-8 h-8 rounded-full bg-gradient-primary"></div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-card-foreground">Demo User</p>
-                  <p className="text-xs text-muted-foreground">demo@veronika.app</p>
+            <div 
+              className="pt-6 mt-6"
+              style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}
+            >
+              <motion.div 
+                whileHover={{ scale: 1.02 }}
+                className="flex items-center gap-3 p-3 rounded-xl transition-colors cursor-pointer"
+                style={{ background: 'rgba(255, 255, 255, 0.03)' }}
+              >
+                <div 
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-semibold"
+                  style={{ background: 'linear-gradient(135deg, #2D6A4F 0%, #40916C 100%)' }}
+                >
+                  D
                 </div>
-              </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-white">Demo User</p>
+                  <p className="text-xs" style={{ color: 'rgba(226, 232, 240, 0.5)' }}>demo@veronika.app</p>
+                </div>
+              </motion.div>
             </div>
           </div>
-        </GlassCard>
+        </div>
       </motion.aside>
 
       {/* Overlay */}
@@ -125,7 +174,8 @@ export function Navigation() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 lg:hidden"
+          className="fixed inset-0 z-30 lg:hidden"
+          style={{ background: 'rgba(0, 0, 0, 0.6)', backdropFilter: 'blur(4px)' }}
           onClick={() => setIsOpen(false)}
         />
       )}

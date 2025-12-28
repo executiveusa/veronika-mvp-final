@@ -40,10 +40,14 @@ export function LanguageSwitcher({ className, variant = 'default' }: LanguageSwi
             variant="ghost"
             size="sm"
             className={cn(
-              "glass-strong border-glass-border text-foreground hover:bg-glass-strong/80",
-              "flex items-center gap-2 px-3 py-2",
+              "flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200",
               className
             )}
+            style={{
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              color: 'rgba(226, 232, 240, 0.9)'
+            }}
           >
             <span className="text-lg">{currentLanguage.flag}</span>
             <Globe className="h-4 w-4" />
@@ -51,17 +55,26 @@ export function LanguageSwitcher({ className, variant = 'default' }: LanguageSwi
         </DropdownMenuTrigger>
         <DropdownMenuContent 
           align="end" 
-          className="glass-strong border-glass-border backdrop-blur-xl"
+          className="min-w-[180px] rounded-xl p-2"
+          style={{
+            background: 'rgba(15, 23, 42, 0.95)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            backdropFilter: 'blur(20px)'
+          }}
         >
           {languages.map((language) => (
             <DropdownMenuItem
               key={language.code}
               onClick={() => handleLanguageChange(language.code)}
               className={cn(
-                "flex items-center gap-3 px-3 py-2 cursor-pointer",
-                "hover:bg-primary/10 transition-colors",
-                i18n.language === language.code && "bg-primary/20 text-primary"
+                "flex items-center gap-3 px-3 py-2.5 cursor-pointer rounded-lg transition-all",
+                i18n.language === language.code 
+                  ? "bg-emerald-500/20 text-emerald-400" 
+                  : "hover:bg-white/5"
               )}
+              style={{
+                color: i18n.language === language.code ? '#4ADE80' : 'rgba(226, 232, 240, 0.9)'
+              }}
             >
               <span className="text-lg">{language.flag}</span>
               <span className="font-medium">{language.name}</span>
@@ -78,11 +91,14 @@ export function LanguageSwitcher({ className, variant = 'default' }: LanguageSwi
         <Button
           variant="outline"
           className={cn(
-            "glass-strong border-glass-border text-foreground",
-            "hover:bg-glass-strong/80 hover:border-primary/30",
-            "flex items-center gap-2 transition-all duration-300",
+            "flex items-center gap-2 transition-all duration-200 rounded-lg",
             className
           )}
+          style={{
+            background: 'rgba(255, 255, 255, 0.05)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            color: 'rgba(226, 232, 240, 0.9)'
+          }}
         >
           <span className="text-lg">{currentLanguage.flag}</span>
           <span className="hidden sm:inline font-medium">{currentLanguage.name}</span>
@@ -91,20 +107,29 @@ export function LanguageSwitcher({ className, variant = 'default' }: LanguageSwi
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="end" 
-        className="glass-strong border-glass-border backdrop-blur-xl min-w-[200px]"
+        className="min-w-[200px] rounded-xl p-2"
+        style={{
+          background: 'rgba(15, 23, 42, 0.95)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(20px)'
+        }}
       >
         {languages.map((language) => (
           <DropdownMenuItem
             key={language.code}
             onClick={() => handleLanguageChange(language.code)}
             className={cn(
-              "flex items-center gap-3 px-4 py-3 cursor-pointer",
-              "hover:bg-primary/10 transition-colors rounded-md",
-              i18n.language === language.code && "bg-primary/20 text-primary font-medium"
+              "flex items-center gap-3 px-4 py-3 cursor-pointer rounded-lg transition-all",
+              i18n.language === language.code 
+                ? "bg-emerald-500/20" 
+                : "hover:bg-white/5"
             )}
+            style={{
+              color: i18n.language === language.code ? '#4ADE80' : 'rgba(226, 232, 240, 0.9)'
+            }}
           >
             <span className="text-xl">{language.flag}</span>
-            <span>{language.name}</span>
+            <span className="font-medium">{language.name}</span>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

@@ -1,42 +1,124 @@
-import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, CheckCircle } from 'lucide-react';
+import { ArrowRight, CheckCircle, Sparkles, Star, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useRef } from 'react';
 
 export function HeroSection() {
   const { t } = useTranslation('common');
+  const sectionRef = useRef<HTMLElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"]
+  });
+  
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2,
+        staggerChildren: 0.12,
+        delayChildren: 0.3,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6 },
+      filter: "blur(0px)",
+      transition: { 
+        duration: 0.8,
+        ease: [0.25, 0.4, 0.25, 1]
+      },
     },
   };
 
-  return (
-    <section className="relative min-h-screen flex items-center pt-20" style={{ backgroundColor: 'hsl(35 43% 97%)' }}>
-      {/* Subtle background accent */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 right-0 w-96 h-96 rounded-full blur-3xl" style={{ backgroundColor: 'hsl(153 41% 30% / 0.05)' }} />
-        <div className="absolute bottom-1/4 left-0 w-96 h-96 rounded-full blur-3xl" style={{ backgroundColor: 'hsl(8 57% 49% / 0.05)' }} />
-      </div>
+  const floatingAnimation = {
+    y: [-10, 10, -10],
+    transition: {
+      duration: 6,
+      repeat: Infinity,
+      ease: "easeInOut"
+    }
+  };
 
-      <div className="container-max relative z-10">
+  const pulseAnimation = {
+    scale: [1, 1.05, 1],
+    opacity: [0.5, 0.8, 0.5],
+    transition: {
+      duration: 4,
+      repeat: Infinity,
+      ease: "easeInOut"
+    }
+  };
+
+  return (
+    <section 
+      ref={sectionRef}
+      className="relative min-h-screen flex items-center overflow-hidden"
+      style={{ 
+        background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 25%, #0F172A 50%, #1E1B4B 75%, #0F172A 100%)'
+      }}
+    >
+      {/* Animated gradient orbs for depth */}
+      <motion.div 
+        className="absolute inset-0 overflow-hidden pointer-events-none"
+        style={{ y: backgroundY }}
+      >
+        {/* Primary accent orb - top right */}
+        <motion.div 
+          animate={pulseAnimation}
+          className="absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full blur-[120px]"
+          style={{ 
+            background: 'radial-gradient(circle, rgba(45, 106, 79, 0.4) 0%, transparent 70%)'
+          }} 
+        />
+        {/* Secondary accent orb - bottom left */}
+        <motion.div 
+          animate={{
+            ...pulseAnimation,
+            transition: { ...pulseAnimation.transition, delay: 2 }
+          }}
+          className="absolute -bottom-32 -left-32 w-[500px] h-[500px] rounded-full blur-[100px]"
+          style={{ 
+            background: 'radial-gradient(circle, rgba(196, 69, 54, 0.3) 0%, transparent 70%)'
+          }} 
+        />
+        {/* Subtle center glow */}
+        <motion.div 
+          animate={{
+            opacity: [0.3, 0.5, 0.3],
+            transition: { duration: 5, repeat: Infinity }
+          }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-[150px]"
+          style={{ 
+            background: 'radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 60%)'
+          }} 
+        />
+      </motion.div>
+
+      {/* Subtle grid pattern overlay */}
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                           linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+          backgroundSize: '60px 60px'
+        }}
+      />
+
+      <motion.div 
+        style={{ opacity }}
+        className="container-max relative z-10 py-20 lg:py-0"
+      >
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Content */}
           <motion.div
@@ -45,73 +127,227 @@ export function HeroSection() {
             animate="visible"
             className="space-y-8"
           >
-            {/* Badge */}
+            {/* Badge with micro-animation */}
             <motion.div variants={itemVariants}>
-              <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium" style={{ backgroundColor: 'hsl(153 41% 30% / 0.1)', color: 'hsl(153 41% 30%)' }}>
+              <motion.span 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold cursor-default"
+                style={{ 
+                  background: 'linear-gradient(135deg, rgba(45, 106, 79, 0.2) 0%, rgba(45, 106, 79, 0.1) 100%)',
+                  border: '1px solid rgba(45, 106, 79, 0.3)',
+                  color: '#4ADE80',
+                  backdropFilter: 'blur(10px)'
+                }}
+              >
+                <Sparkles className="h-4 w-4" />
                 Strategic Business Partner
-              </span>
+              </motion.span>
             </motion.div>
 
-            {/* Headline */}
+            {/* Headline with gradient text */}
             <motion.h1 
               variants={itemVariants}
-              className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-foreground leading-tight"
+              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-display font-bold leading-[1.1] tracking-tight"
             >
-              {t('heroTitle')}
+              <span className="text-white">{t('heroTitle').split(' ').slice(0, -2).join(' ')} </span>
+              <span 
+                className="inline-block"
+                style={{
+                  background: 'linear-gradient(135deg, #4ADE80 0%, #22D3EE 50%, #818CF8 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text'
+                }}
+              >
+                {t('heroTitle').split(' ').slice(-2).join(' ')}
+              </span>
             </motion.h1>
 
-            {/* Subheadline */}
+            {/* Subheadline with better contrast */}
             <motion.p 
               variants={itemVariants}
-              className="text-xl text-muted-foreground max-w-xl leading-relaxed"
+              className="text-lg sm:text-xl max-w-xl leading-relaxed"
+              style={{ color: 'rgba(226, 232, 240, 0.8)' }}
             >
               {t('heroDescription')}
             </motion.p>
 
-            {/* CTAs */}
-            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4">
+            {/* CTAs with enhanced hover states */}
+            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 pt-4">
               <Link to="/book">
-                <Button size="lg" className="btn-primary text-lg group">
-                  {t('heroCta')}
-                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                </Button>
+                <motion.div
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  <Button 
+                    size="lg" 
+                    className="text-lg font-semibold px-8 py-6 rounded-xl group relative overflow-hidden"
+                    style={{
+                      background: 'linear-gradient(135deg, #2D6A4F 0%, #40916C 100%)',
+                      boxShadow: '0 4px 20px rgba(45, 106, 79, 0.4), 0 0 40px rgba(45, 106, 79, 0.2)',
+                      color: 'white'
+                    }}
+                  >
+                    <span className="relative z-10 flex items-center">
+                      {t('heroCta')}
+                      <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                    </span>
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                      initial={{ x: "-100%" }}
+                      whileHover={{ x: "100%" }}
+                      transition={{ duration: 0.6 }}
+                    />
+                  </Button>
+                </motion.div>
               </Link>
               <a href="#services">
-                <Button size="lg" variant="outline" className="btn-secondary text-lg">
-                  {t('heroCtaSecondary')}
-                </Button>
+                <motion.div
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="text-lg font-semibold px-8 py-6 rounded-xl"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      color: 'white',
+                      backdropFilter: 'blur(10px)'
+                    }}
+                  >
+                    {t('heroCtaSecondary')}
+                  </Button>
+                </motion.div>
               </a>
             </motion.div>
 
-            {/* Trust Element */}
+            {/* Trust Elements with icons */}
             <motion.div 
               variants={itemVariants}
-              className="flex items-center gap-3 text-muted-foreground"
+              className="flex flex-wrap items-center gap-6 pt-4"
             >
-              <CheckCircle className="h-5 w-5" style={{ color: 'hsl(153 41% 30%)' }} />
-              <span className="text-sm">{t('heroTrust')}</span>
+              <div className="flex items-center gap-2" style={{ color: 'rgba(226, 232, 240, 0.7)' }}>
+                <CheckCircle className="h-5 w-5 text-emerald-400" />
+                <span className="text-sm font-medium">{t('heroTrust')}</span>
+              </div>
+              <div className="flex items-center gap-2" style={{ color: 'rgba(226, 232, 240, 0.7)' }}>
+                <Shield className="h-5 w-5 text-cyan-400" />
+                <span className="text-sm font-medium">Trusted Advisor</span>
+              </div>
+              <div className="flex items-center gap-2" style={{ color: 'rgba(226, 232, 240, 0.7)' }}>
+                <Star className="h-5 w-5 text-amber-400" />
+                <span className="text-sm font-medium">10+ Years Experience</span>
+              </div>
             </motion.div>
           </motion.div>
 
-          {/* Photo Placeholder */}
+          {/* Photo/Visual with floating animation */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            initial={{ opacity: 0, scale: 0.9, rotateY: -10 }}
+            animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+            transition={{ duration: 1, delay: 0.5, ease: [0.25, 0.4, 0.25, 1] }}
             className="relative"
           >
-            <div className="aspect-[4/5] rounded-2xl overflow-hidden" style={{ background: 'linear-gradient(to bottom right, hsl(153 41% 30% / 0.2), hsl(8 57% 49% / 0.2))' }}>
-              {/* Replace with actual photo */}
-              <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
-                <span className="text-lg">Photo of Veronika</span>
+            <motion.div 
+              animate={floatingAnimation}
+              className="relative"
+            >
+              {/* Main image container with glassmorphism */}
+              <div 
+                className="aspect-[4/5] rounded-3xl overflow-hidden relative"
+                style={{ 
+                  background: 'linear-gradient(135deg, rgba(45, 106, 79, 0.3) 0%, rgba(99, 102, 241, 0.2) 50%, rgba(196, 69, 54, 0.2) 100%)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 80px rgba(45, 106, 79, 0.2)',
+                  backdropFilter: 'blur(20px)'
+                }}
+              >
+                {/* Placeholder with elegant styling */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
+                  <motion.div
+                    animate={{ 
+                      boxShadow: [
+                        '0 0 20px rgba(74, 222, 128, 0.3)',
+                        '0 0 40px rgba(74, 222, 128, 0.5)',
+                        '0 0 20px rgba(74, 222, 128, 0.3)'
+                      ]
+                    }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                    className="w-32 h-32 rounded-full mb-6 flex items-center justify-center"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(45, 106, 79, 0.5) 0%, rgba(99, 102, 241, 0.3) 100%)',
+                      border: '2px solid rgba(74, 222, 128, 0.4)'
+                    }}
+                  >
+                    <span className="text-5xl font-display font-bold text-white">V</span>
+                  </motion.div>
+                  <span 
+                    className="text-lg font-medium text-center"
+                    style={{ color: 'rgba(226, 232, 240, 0.9)' }}
+                  >
+                    Photo of Veronika
+                  </span>
+                  <span 
+                    className="text-sm mt-2 text-center"
+                    style={{ color: 'rgba(226, 232, 240, 0.5)' }}
+                  >
+                    Strategic Business Consultant
+                  </span>
+                </div>
+                
+                {/* Subtle shine effect */}
+                <div 
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, transparent 100%)'
+                  }}
+                />
               </div>
-            </div>
-            {/* Decorative element */}
-            <div className="absolute -bottom-6 -left-6 w-32 h-32 rounded-2xl -z-10" style={{ backgroundColor: 'hsl(153 41% 30% / 0.1)' }} />
-            <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full -z-10" style={{ backgroundColor: 'hsl(8 57% 49% / 0.1)' }} />
+
+              {/* Decorative floating elements */}
+              <motion.div 
+                animate={{ 
+                  y: [-5, 5, -5],
+                  rotate: [0, 5, 0]
+                }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute -bottom-4 -left-4 w-24 h-24 rounded-2xl -z-10"
+                style={{ 
+                  background: 'linear-gradient(135deg, rgba(45, 106, 79, 0.4) 0%, rgba(45, 106, 79, 0.1) 100%)',
+                  border: '1px solid rgba(45, 106, 79, 0.2)',
+                  backdropFilter: 'blur(10px)'
+                }} 
+              />
+              <motion.div 
+                animate={{ 
+                  y: [5, -5, 5],
+                  rotate: [0, -5, 0]
+                }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute -top-4 -right-4 w-20 h-20 rounded-full -z-10"
+                style={{ 
+                  background: 'linear-gradient(135deg, rgba(196, 69, 54, 0.3) 0%, rgba(196, 69, 54, 0.1) 100%)',
+                  border: '1px solid rgba(196, 69, 54, 0.2)',
+                  backdropFilter: 'blur(10px)'
+                }} 
+              />
+            </motion.div>
           </motion.div>
         </div>
-      </div>
+      </motion.div>
+
+      {/* Bottom gradient fade */}
+      <div 
+        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+        style={{
+          background: 'linear-gradient(to top, rgba(15, 23, 42, 1) 0%, transparent 100%)'
+        }}
+      />
     </section>
   );
 }

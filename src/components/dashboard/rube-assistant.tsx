@@ -6,17 +6,13 @@ import {
   Zap, 
   Mail, 
   Calendar, 
-  Users,
-  Slack,
   Database,
   Lightbulb,
-  ChevronRight
+  Slack
 } from 'lucide-react';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { GlassCard } from '@/components/ui/glass-card';
 
 interface SuggestedAction {
   id: string;
@@ -66,13 +62,11 @@ export function RubeAssistant() {
   const handleSendMessage = async (text: string) => {
     if (!text.trim()) return;
 
-    // Add user message
     const userMessage = text;
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setMessage('');
     setIsLoading(true);
 
-    // Simulate Rube processing
     setTimeout(() => {
       setMessages(prev => [...prev, {
         role: 'assistant',
@@ -95,24 +89,54 @@ export function RubeAssistant() {
     >
       <div>
         <div className="flex items-center gap-3 mb-2">
-          <Zap className="h-6 w-6 text-primary" />
-          <h2 className="text-2xl font-bold text-card-foreground">Rube AI Assistant</h2>
-          <Badge className="bg-primary/20 text-primary">Internal Only</Badge>
+          <Zap className="h-6 w-6" style={{ color: '#4ADE80' }} />
+          <h2 
+            className="text-2xl font-bold"
+            style={{
+              background: 'linear-gradient(135deg, #FFFFFF 0%, rgba(226, 232, 240, 0.8) 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}
+          >
+            Rube AI Assistant
+          </h2>
+          <Badge 
+            className="border-0"
+            style={{ 
+              background: 'rgba(74, 222, 128, 0.15)',
+              color: '#4ADE80'
+            }}
+          >
+            Internal Only
+          </Badge>
         </div>
-        <p className="text-muted-foreground">
+        <p style={{ color: 'rgba(226, 232, 240, 0.6)' }}>
           Your AI-powered workflow automation. Connect to 500+ apps and automate tasks with plain English commands.
         </p>
       </div>
 
       {/* Main Chat Card */}
-      <GlassCard variant="strong" className="p-6 space-y-6">
+      <div 
+        className="p-6 rounded-2xl space-y-6"
+        style={{
+          background: 'rgba(255, 255, 255, 0.03)',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          backdropFilter: 'blur(10px)'
+        }}
+      >
         {/* Info Banner */}
-        <div className="p-4 rounded-lg bg-blue-50/50 border border-blue-200 dark:bg-blue-950/20 dark:border-blue-800">
+        <div 
+          className="p-4 rounded-xl"
+          style={{
+            background: 'rgba(56, 189, 248, 0.1)',
+            border: '1px solid rgba(56, 189, 248, 0.2)'
+          }}
+        >
           <div className="flex items-start gap-3">
-            <Lightbulb className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-            <div className="text-sm text-blue-900 dark:text-blue-200">
-              <p className="font-semibold mb-1">How Rube Works</p>
-              <p className="text-xs opacity-90">
+            <Lightbulb className="h-5 w-5 mt-0.5 flex-shrink-0" style={{ color: '#38BDF8' }} />
+            <div className="text-sm">
+              <p className="font-semibold mb-1" style={{ color: '#38BDF8' }}>How Rube Works</p>
+              <p className="text-xs" style={{ color: 'rgba(56, 189, 248, 0.8)' }}>
                 Rube (powered by Composio) connects your dashboard to 500+ business apps. Ask it to send emails, create calendar events, post to Slack, manage Airtable databases, and more—all in plain English.
               </p>
             </div>
@@ -121,7 +145,10 @@ export function RubeAssistant() {
 
         {/* Chat Messages */}
         {messages.length > 0 && (
-          <div className="space-y-4 max-h-80 overflow-y-auto p-4 rounded-lg bg-muted/30">
+          <div 
+            className="space-y-4 max-h-80 overflow-y-auto p-4 rounded-xl"
+            style={{ background: 'rgba(255, 255, 255, 0.02)' }}
+          >
             {messages.map((msg, idx) => (
               <motion.div
                 key={idx}
@@ -130,11 +157,16 @@ export function RubeAssistant() {
                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-xs px-4 py-2 rounded-lg ${
-                    msg.role === 'user'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted text-card-foreground border border-border'
-                  }`}
+                  className="max-w-xs px-4 py-3 rounded-xl"
+                  style={{
+                    background: msg.role === 'user' 
+                      ? 'linear-gradient(135deg, #2D6A4F 0%, #40916C 100%)' 
+                      : 'rgba(255, 255, 255, 0.05)',
+                    border: msg.role === 'user' 
+                      ? 'none' 
+                      : '1px solid rgba(255, 255, 255, 0.1)',
+                    color: 'white'
+                  }}
                 >
                   <p className="text-sm">{msg.content}</p>
                 </div>
@@ -142,11 +174,17 @@ export function RubeAssistant() {
             ))}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-muted text-card-foreground border border-border px-4 py-2 rounded-lg">
+                <div 
+                  className="px-4 py-3 rounded-xl"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)'
+                  }}
+                >
                   <div className="flex gap-2 items-center">
-                    <div className="h-2 w-2 bg-primary rounded-full animate-bounce" />
-                    <div className="h-2 w-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-                    <div className="h-2 w-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
+                    <div className="h-2 w-2 rounded-full animate-bounce" style={{ background: '#4ADE80' }} />
+                    <div className="h-2 w-2 rounded-full animate-bounce" style={{ background: '#4ADE80', animationDelay: '0.2s' }} />
+                    <div className="h-2 w-2 rounded-full animate-bounce" style={{ background: '#4ADE80', animationDelay: '0.4s' }} />
                   </div>
                 </div>
               </div>
@@ -157,23 +195,33 @@ export function RubeAssistant() {
         {/* Suggested Actions */}
         {messages.length === 0 && !isExpanded && (
           <div>
-            <p className="text-sm font-medium text-card-foreground mb-3">Quick Actions</p>
+            <p className="text-sm font-medium text-white mb-3">Quick Actions</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {SUGGESTED_ACTIONS.map((action) => (
                 <motion.button
                   key={action.id}
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handleSuggestedAction(action)}
-                  className="text-left p-4 rounded-lg border border-border bg-background hover:bg-muted/50 transition-colors"
+                  className="text-left p-4 rounded-xl transition-colors"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.03)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)'
+                  }}
                 >
                   <div className="flex items-start gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                    <div 
+                      className="p-2 rounded-lg"
+                      style={{ 
+                        background: 'rgba(74, 222, 128, 0.15)',
+                        color: '#4ADE80'
+                      }}
+                    >
                       {action.icon}
                     </div>
                     <div>
-                      <p className="font-medium text-sm text-card-foreground">{action.label}</p>
-                      <p className="text-xs text-muted-foreground mt-1">{action.description}</p>
+                      <p className="font-medium text-sm text-white">{action.label}</p>
+                      <p className="text-xs mt-1" style={{ color: 'rgba(226, 232, 240, 0.5)' }}>{action.description}</p>
                     </div>
                   </div>
                 </motion.button>
@@ -183,7 +231,10 @@ export function RubeAssistant() {
         )}
 
         {/* Input Area */}
-        <div className="space-y-3 pt-4 border-t border-border">
+        <div 
+          className="space-y-3 pt-4"
+          style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}
+        >
           <div className="flex gap-2">
             <Input
               value={message}
@@ -194,27 +245,44 @@ export function RubeAssistant() {
                   handleSendMessage(message);
                 }
               }}
-              placeholder="Ask Rube to automate something... (e.g., 'Send email to new clients')"
-              className="glass border-glass-border text-sm"
+              placeholder="Ask Rube to automate something..."
+              className="rounded-xl border-0 text-sm"
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                color: 'white'
+              }}
             />
-            <Button
-              onClick={() => handleSendMessage(message)}
-              disabled={!message.trim() || isLoading}
-              className="bg-primary hover:bg-primary/90"
-              size="icon"
-            >
-              <Send className="h-4 w-4" />
-            </Button>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                onClick={() => handleSendMessage(message)}
+                disabled={!message.trim() || isLoading}
+                className="rounded-xl"
+                size="icon"
+                style={{
+                  background: 'linear-gradient(135deg, #2D6A4F 0%, #40916C 100%)',
+                  color: 'white'
+                }}
+              >
+                <Send className="h-4 w-4" />
+              </Button>
+            </motion.div>
           </div>
-          <p className="text-xs text-muted-foreground">
-                💡 Tip: Use natural language like "Send welcome email to TechCorp" or "Add booking to calendar"
+          <p className="text-xs" style={{ color: 'rgba(226, 232, 240, 0.5)' }}>
+            💡 Tip: Use natural language like "Send welcome email to TechCorp" or "Add booking to calendar"
           </p>
         </div>
-      </GlassCard>
+      </div>
 
       {/* Connected Apps Status */}
-      <GlassCard variant="strong" className="p-6">
-        <h3 className="font-semibold text-card-foreground mb-4">Connected Services</h3>
+      <div 
+        className="p-6 rounded-2xl"
+        style={{
+          background: 'rgba(255, 255, 255, 0.03)',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          backdropFilter: 'blur(10px)'
+        }}
+      >
+        <h3 className="font-semibold text-white mb-4">Connected Services</h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {[
             { name: 'Gmail', icon: Mail, connected: false },
@@ -225,40 +293,57 @@ export function RubeAssistant() {
             <motion.div
               key={app.name}
               whileHover={{ y: -2 }}
-              className="p-4 rounded-lg border border-border bg-background hover:bg-muted/50 transition-colors"
+              className="p-4 rounded-xl transition-colors"
+              style={{
+                background: 'rgba(255, 255, 255, 0.02)',
+                border: '1px solid rgba(255, 255, 255, 0.05)'
+              }}
             >
               <div className="flex items-center gap-2 mb-2">
-                <app.icon className={`h-5 w-5 ${app.connected ? 'text-green-500' : 'text-muted-foreground'}`} />
-                <span className="text-sm font-medium text-card-foreground">{app.name}</span>
+                <app.icon 
+                  className="h-5 w-5" 
+                  style={{ color: app.connected ? '#4ADE80' : 'rgba(226, 232, 240, 0.5)' }} 
+                />
+                <span className="text-sm font-medium text-white">{app.name}</span>
               </div>
               <Badge
-                variant={app.connected ? 'default' : 'secondary'}
-                className="text-xs"
+                className="text-xs border-0"
+                style={{
+                  background: app.connected ? 'rgba(74, 222, 128, 0.15)' : 'rgba(255, 255, 255, 0.05)',
+                  color: app.connected ? '#4ADE80' : 'rgba(226, 232, 240, 0.5)'
+                }}
               >
                 {app.connected ? 'Connected' : 'Awaiting Setup'}
               </Badge>
             </motion.div>
           ))}
         </div>
-        <p className="text-xs text-muted-foreground mt-4">
+        <p className="text-xs mt-4" style={{ color: 'rgba(226, 232, 240, 0.5)' }}>
           🔐 All connections are secure and encrypted. Your credentials are managed by Composio (SOC 2 compliant).
         </p>
-      </GlassCard>
+      </div>
 
       {/* Help Section */}
-      <Card className="p-6 bg-card border-border">
-        <h3 className="font-semibold text-card-foreground mb-3 flex items-center gap-2">
-          <MessageSquare className="h-5 w-5 text-primary" />
+      <div 
+        className="p-6 rounded-2xl"
+        style={{
+          background: 'rgba(255, 255, 255, 0.03)',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          backdropFilter: 'blur(10px)'
+        }}
+      >
+        <h3 className="font-semibold text-white mb-3 flex items-center gap-2">
+          <MessageSquare className="h-5 w-5" style={{ color: '#4ADE80' }} />
           Example Commands
         </h3>
-        <div className="space-y-2 text-sm text-muted-foreground">
+        <div className="space-y-2 text-sm" style={{ color: 'rgba(226, 232, 240, 0.7)' }}>
           <p>✓ "Send welcome email to all new clients"</p>
           <p>✓ "Add my bookings to Google Calendar"</p>
           <p>✓ "Post project updates to Slack"</p>
           <p>✓ "Create Airtable record for TechCorp"</p>
           <p>✓ "Generate invoice for completed project"</p>
         </div>
-      </Card>
+      </div>
     </motion.div>
   );
 }
