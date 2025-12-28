@@ -1,0 +1,13 @@
+[build]
+builder = "nixpacks"
+watchPatterns = ["src/**", "public/**", "package.json"]
+
+[deploy]
+startCommand = "npm run preview"
+restartPolicyMaxRetries = 5
+restartPolicyWindow = 60
+
+[env]
+PORT = "3000"
+NODE_ENV = "production"
+VITE_APP_NAME = "Veronika MVP"

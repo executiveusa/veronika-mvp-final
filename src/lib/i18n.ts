@@ -184,6 +184,14 @@ const resources = {
       problemPoint4: "Инвеститорите задават въпроси, на които нямате отговори",
       problemTransition: "Ами ако някой, който говори и на числа, и на хора, може да помогне?",
       
+      // Transformation Section
+      transformTitle: "Представи си вместо това...",
+      transformPoint1: "Влизаш в срещи с инвеститори с увереност—не с пръсти кръстосани",
+      transformPoint2: "Знаеш точно какви метрики важат и защо се движат",
+      transformPoint3: "Имаш някого в своя ъгъл, който е видял този филм преди",
+      transformPoint4: "Накрая се освобождаваш от оперативния хаос",
+      transformCta: "Това е това, което те помагам да построиш",
+      
       // About Section
       aboutTitle: "Здравейте, аз съм Вероника",
       aboutParagraph1: "Прекарах години в корпоративно банкиране, управлявайки \ милиона в SaaS, edtech и потребителски марки. Седях до VC-та, оценявайки качеството на сделки и учейки какво отличава бизнесите, които растат.",
@@ -194,7 +202,7 @@ const resources = {
       servicesTitle: 'Как помагам',
       service1Title: 'Стратегически бизнес анализ',
       service1Hook: 'Вижте бизнеса си през очите на инвеститорите',
-      service1Desc: 'Помагам ви да разберете какво всъщност означават метриките ви.',
+      service1Desc: 'Помагам ви да разберете какво всъщност означават метриките ви—където са вашите палачи на растеж и какви червени флага да коригирате преди да ги забележи някой.',
       service1Outcome: 'Увереност в числата. Яснота в посоката.',
       
       service2Title: 'Изпълнителна поддръжка',
@@ -204,12 +212,12 @@ const resources = {
       
       service3Title: 'Съдържание за презентации',
       service3Hook: 'Разкажете историята си както инвеститорите искат да я чуят',
-      service3Desc: 'Pitch decks, стратегически презентации, борд ъпдейти.',
-      service3Outcome: 'Презентации, които затварят сделки.',
+      service3Desc: 'Pitch decks, стратегически презентации, актуализации на борда—помагам ви да поставите вашата наративост за максимално въздействие.',
+      service3Outcome: 'Презентации, които затварят сделки и вдъхновяват доверие.',
       
       service4Title: 'Уелнес съдържание',
       service4Hook: 'За съзнателни бизнеси с нужда от думи с душа',
-      service4Desc: 'Блог постове, биографии, описания на класове за уелнес марки.',
+      service4Desc: 'Блог постове, биографии, описания на класове за уелнес марки. Строя своя портфолио тук—попитай за специални тарифи.',
       service4Outcome: 'Съдържание, което резонира с вашата общност.',
       
       // LEGACY Services
@@ -220,22 +228,38 @@ const resources = {
       expenseManagement: 'Управление на разходи',
       expenseManagementDesc: 'Финансово проследяване и отчитане',
       
+      // Proof Section
+      proofTitle: 'Реални резултати',
+      testimonial1Quote: "Вероника ми помогна да видя това, което не можех—че моята единична икономика беше под вода. Три месеца по-късно, ние сме печеливши.",
+      testimonial1Name: "Sarah Chen",
+      testimonial1Role: "Основателка, HealthStack",
+      testimonial1Metric: "От -12% до +8% маржинаж",
+      
+      testimonial2Quote: "Влязох в моя pitch от Serie A с увереност за първи път. Тя знае точно какво искат да видят инвеститорите.",
+      testimonial2Name: "Marcus Thompson",
+      testimonial2Role: "CEO, Revive Fitness",
+      testimonial2Metric: "Събра $1.3M",
+      
+      testimonial3Quote: "Преде своята календар на хаоса и ми върна своите сутрин. Накрая имам време да мисля.",
+      testimonial3Name: "Ana Reyes",
+      testimonial3Role: "Основателка, Mindful Studio",
+      
       // Process
       processTitle: 'Как работи',
       processStep1Title: 'Говорим',
-      processStep1Desc: 'Безплатен 30-минутен разговор да разбера визията и предизвикателствата ви.',
+      processStep1Desc: 'Безплатен 30-минутен разговор да разбера визията, предизвикателствата и какво точно се случва под повърхността.',
       processStep2Title: 'Планираме',
-      processStep2Desc: 'Диагностицирам пропуските, предлагам пътна карта.',
+      processStep2Desc: 'Диагностицирам пропуските, предлагам пътна карта и решаваме обхвата, който има смисъл за теб.',
       processStep3Title: 'Изпълняваме',
-      processStep3Desc: 'Работя заедно с вас—не над вас.',
-      processStep4Title: 'Растете',
-      processStep4Desc: 'С по-ясни метрики, повече време и по-добри решения.',
+      processStep3Desc: 'Независимо дали е постоянна подкрепа или сфокусиран проект, работя с тебе—не над теб.',
+      processStep4Title: 'Растеш',
+      processStep4Desc: 'С по-ясни метрики, повече време и по-добри решения—накрая можеш да се фокусираш върху това, което има значение.',
       
       // CTA
-      ctaTitle: "Следващата ви стъпка не трябва да е на сляпо",
-      ctaSubtitle: "Да изградим яснотата, която ви липсва. Един разговор е всичко, от което имате нужда.",
-      ctaButton: "Резервирайте безплатен разговор",
-      ctaReassurance: "Без натиск. Просто истински разговор.",
+      ctaTitle: "Следващата ти стъпка не трябва да бъде на сляпо",
+      ctaSubtitle: "Да построим яснотата, която ти липсва. Един разговор е всичко, което ти трябва, за да започнеш.",
+      ctaButton: "Резервирай своята безплатна позвана",
+      ctaReassurance: "Без pitch. Без натиск. Просто истински разговор.",
       
       // Dashboard
       totalClients: 'Активни клиенти',
@@ -262,9 +286,216 @@ const resources = {
       completed: 'Завършен',
       draft: 'Чернова',
       
+      // Book Demo Page
+      backToHome: 'Назад в началото',
+      bookYourDemo: 'Резервирай своя демо',
+      demoSubtitle: 'Насрочи персонализиран демо, за да видиш как Вероника може да трансформира работния ти поток.',
+      whatToExpect: 'Какво да очакваш',
+      demoMinutes30: '30-минутна сесия',
+      demoMinutesDesc: 'Всеобхватен преглед на всички функции',
+      personalizedDemo: 'Персонализиран демо',
+      personalizedDemoDesc: 'Коригиран според нуждите на твоя бизнес',
+      qaSession: 'Сесия за въпроси',
+      qaSessionDesc: 'Получи отговори на всички твои въпроси',
+      demoFeatures: 'Функции на демото',
+      featureClientManagement: 'Управление на клиенти и проекти',
+      featureTaskTracking: 'Следене на задачи и Канбан дъски',
+      featureInvoicing: 'Обработка на фактури и плащания',
+      featureAnalytics: 'Анализи и отчети',
+      scheduleYourDemo: 'Насрочи своя демо',
+      fullName: 'Пълно име',
+      email: 'Имейл',
+      company: 'Компания',
+      preferredDate: 'Предпочитана дата',
+      preferredTime: 'Предпочитано време',
+      additionalMessage: 'Допълнително съобщение',
+      bookMyDemo: 'Резервирай моя демо',
+      businessNeeds: 'Разкажи ни за нуждите на твоя бизнес...',
+      missingInformation: 'Липсва информация',
+      pleaseFilFill: 'Моля, попълни всички задължителни полета и избери час.',
+      demoBookedTitle: 'Демо Резервирано!',
+      demoBookedSuccess: 'Демото ти е насрочено за {date} в {time}. Ще ти изпратим потвърдително писмо с детайлите на срещата.',
+      demoBookedButton: 'Назад в началото',
+      
       // Footer
       footerTagline: 'Стратегия, душа и структура',
       footerCopyright: '© 2025 Вероника Н. Димитрова. Всички права запазени.',
+    }
+  },
+  'es-MX': {
+    common: {
+      // Navigation
+      overview: 'Resumen',
+      clients: 'Clientes',
+      projects: 'Proyectos',
+      expenses: 'Gastos',
+      sessions: 'Sesiones',
+      bookings: 'Reservas',
+      settings: 'Configuración',
+      
+      // Navigation Labels
+      navMyStory: 'Mi Historia',
+      navHowIHelp: 'Cómo Ayudo',
+      navResults: 'Resultados Reales',
+      navLetsTalk: 'Hablemos de Estrategia',
+      
+      // Hero Section
+      heroTitle: "Tu Negocio Necesita la Visión de un Inversionista—Sin el Inversionista",
+      heroSubtitle: "Claridad estratégica para fundadores que no están listos para VCs aún",
+      heroDescription: "Traigo el mismo rigor analítico que usé para gestionar un portafolio para ayudarte a entender tus métricas, encontrar tus palancas de crecimiento y tomar decisiones con confianza.",
+      heroCta: "Hablemos de Estrategia",
+      heroCtaSecondary: "Ve Cómo Trabajo",
+      heroTrust: "Ex analista de VC. Ahora en tu equipo.",
+      
+      // LEGACY
+      bookDemo: "Hablemos de Estrategia",
+      learnMore: 'Ve Cómo Trabajo',
+      
+      // Problem Section
+      problemTitle: "¿Te Suena Familiar?",
+      problemPoint1: "Tus hojas de cálculo son un caos—y las reuniones con inversionistas son un pánico",
+      problemPoint2: "Sabes que algo anda mal, pero no puedes encontrar dónde está la fuga",
+      problemPoint3: "Eres el CEO, CFO y principal respondedor de correos todo a la vez",
+      problemPoint4: "Los inversionistas hacen preguntas que no puedes responder",
+      problemTransition: "¿Y si alguien que habla tanto de números como de personas pudiera ayudarte?",
+      
+      // Transformation Section
+      transformTitle: "Imagina en Su Lugar...",
+      transformPoint1: "Entrar a reuniones con inversionistas con confianza—no con los dedos cruzados",
+      transformPoint2: "Saber exactamente qué métricas importan y por qué se están moviendo",
+      transformPoint3: "Tener a alguien en tu equipo que ha visto esta película antes",
+      transformPoint4: "Finalmente liberarte del caos operacional",
+      transformCta: "Esto es lo que te ayudo a construir",
+      
+      // About Section
+      aboutTitle: "Hola, soy Veronika",
+      aboutParagraph1: "Pasé años en banca corporativa, gestionando millones de dólares en SaaS, edtech y marcas de consumidor. Me sentaba junto a VCs, evaluando la calidad de los tratos, pronosticando demanda y aprendiendo qué separa a los negocios que escalan de aquellos que se estancan.",
+      aboutParagraph2: "Pero también me volví instructora certificada de yoga. Porque creo que las mejores decisiones de negocio vienen de la claridad—no del caos. Y a veces, necesitas tanto rigor estratégico como espacio para respirar.",
+      aboutParagraph3: "Ahora traigo esa lente de inversionista a fundadores que más la necesitan. No necesitas un CFO de tiempo completo. Necesitas a alguien que ha estado del otro lado de la mesa y sabe qué buscan.",
+      
+      // Services Section
+      servicesTitle: 'Cómo Ayudo',
+      
+      service1Title: 'Análisis Estratégico del Negocio',
+      service1Hook: 'Ve tu negocio como lo ven los inversionistas',
+      service1Desc: "Te ayudo a entender qué significan realmente tus métricas—dónde están tus palancas de crecimiento y qué banderas rojas arreglar antes de que alguien más las note.",
+      service1Outcome: 'Confianza en tus números. Claridad en tu dirección.',
+      
+      service2Title: 'Apoyo Ejecutivo',
+      service2Hook: 'Recupera tu tiempo sin perder el control',
+      service2Desc: 'Calendario, bandeja de entrada, atención al cliente—manejado con la precisión que traje a la gestión de portafolios de millones.',
+      service2Outcome: 'Tus operaciones funcionan sin problemas mientras te enfocas en el crecimiento.',
+      
+      service3Title: 'Contenido de Presentaciones',
+      service3Hook: 'Cuenta tu historia como los inversionistas quieren escucharla',
+      service3Desc: 'Pitch decks, presentaciones estratégicas, actualizaciones de junta—te ayudo a enmarcar tu narrativa para máximo impacto.',
+      service3Outcome: 'Presentaciones que cierran tratos e inspiran confianza.',
+      
+      service4Title: 'Contenido de Bienestar',
+      service4Hook: 'Para negocios conscientes que necesitan palabras con alma',
+      service4Desc: 'Publicaciones de blog, biografías, descripciones de clases para marcas de bienestar. Estoy construyendo mi portafolio aquí—pregunta por tarifas especiales.',
+      service4Outcome: 'Contenido que resuena con tu comunidad.',
+      
+      // LEGACY Services
+      clientManagement: 'Gestión de Clientes',
+      clientManagementDesc: 'CRM sofisticado con análisis e información',
+      projectTracking: 'Seguimiento de Proyectos',
+      projectTrackingDesc: 'Tableros Kanban elegantes y monitoreo de progreso',
+      expenseManagement: 'Gestión de Gastos',
+      expenseManagementDesc: 'Seguimiento financiero y reportes optimizados',
+      
+      // Proof Section
+      proofTitle: 'Resultados Reales',
+      testimonial1Quote: "Veronika me ayudó a ver lo que no podía—que mi economía unitaria estaba bajo el agua. Tres meses después, somos rentables.",
+      testimonial1Name: "Sarah Chen",
+      testimonial1Role: "Fundadora, HealthStack",
+      testimonial1Metric: "De -12% a +8% márgenes",
+      
+      testimonial2Quote: "Entré en mi pitch de Serie A con confianza por primera vez. Ella sabe exactamente qué quieren ver los inversionistas.",
+      testimonial2Name: "Marcus Thompson",
+      testimonial2Role: "CEO, Revive Fitness",
+      testimonial2Metric: "Recaudó $1.3M",
+      
+      testimonial3Quote: "Se hizo cargo del caos de mi calendario y me devolvió mis mañanas. Finalmente tengo tiempo para pensar.",
+      testimonial3Name: "Ana Reyes",
+      testimonial3Role: "Fundadora, Mindful Studio",
+      
+      // Process Section
+      processTitle: 'Cómo Funciona',
+      processStep1Title: 'Nos Conocemos',
+      processStep1Desc: "Una llamada gratis de 30 minutos para entender tu visión, desafíos y qué está realmente pasando bajo la superficie.",
+      processStep2Title: 'Planeamos',
+      processStep2Desc: "Diagnostico las brechas, propongo un plan de ruta y decidimos el alcance que tiene sentido para ti.",
+      processStep3Title: 'Ejecutamos',
+      processStep3Desc: "Ya sea apoyo continuo o un proyecto enfocado, trabajo junto a ti—no arriba de ti.",
+      processStep4Title: 'Creces',
+      processStep4Desc: "Con métricas más claras, más tiempo y mejores decisiones—finalmente puedes enfocarte en lo que importa.",
+      
+      // Final CTA
+      ctaTitle: "Tu Próximo Movimiento No Debería Ser una Adivinanza",
+      ctaSubtitle: "Construyamos la claridad que te ha faltado. Una conversación es todo lo que necesitas para empezar.",
+      ctaButton: "Agenda Tu Llamada Gratis",
+      ctaReassurance: "Sin pitch. Sin presión. Solo una conversación real.",
+      
+      // Dashboard
+      totalClients: 'Clientes Activos',
+      activeProjects: 'Proyectos Activos',
+      monthlyRevenue: 'Ingresos (30d)',
+      upcomingSessions: 'Sesiones Próximas',
+      upcomingTasks: 'Tareas Próximas',
+      recentProjects: 'Proyectos Recientes',
+      welcomeBack: "¡Bienvenido de vuelta! Aquí está lo que está pasando.",
+      
+      // Actions
+      add: 'Agregar',
+      edit: 'Editar',
+      delete: 'Eliminar',
+      save: 'Guardar',
+      cancel: 'Cancelar',
+      view: 'Ver',
+      learnMoreAction: 'Aprende Más',
+      
+      // Status
+      active: 'Activo',
+      inactive: 'Inactivo',
+      pending: 'Pendiente',
+      completed: 'Completado',
+      draft: 'Borrador',
+      
+      // Book Demo Page
+      backToHome: 'Volver a la página de inicio',
+      bookYourDemo: 'Reserva Tu Demostración',
+      demoSubtitle: 'Agenda una demostración personalizada para ver cómo Veronika puede transformar tu flujo de trabajo.',
+      whatToExpect: 'Qué Esperar',
+      demoMinutes30: 'Sesión de 30 Minutos',
+      demoMinutesDesc: 'Recorrido completo de todas las características',
+      personalizedDemo: 'Demostración Personalizada',
+      personalizedDemoDesc: 'Adaptada a las necesidades de tu negocio',
+      qaSession: 'Sesión de Preguntas y Respuestas',
+      qaSessionDesc: 'Obtén respuestas a todas tus preguntas',
+      demoFeatures: 'Características de la Demostración',
+      featureClientManagement: 'Gestión de Clientes y Proyectos',
+      featureTaskTracking: 'Seguimiento de Tareas y Tableros Kanban',
+      featureInvoicing: 'Procesamiento de Facturas y Pagos',
+      featureAnalytics: 'Análisis e Informes',
+      scheduleYourDemo: 'Agenda Tu Demostración',
+      fullName: 'Nombre Completo',
+      email: 'Correo Electrónico',
+      company: 'Empresa',
+      preferredDate: 'Fecha Preferida',
+      preferredTime: 'Hora Preferida',
+      additionalMessage: 'Mensaje Adicional',
+      bookMyDemo: 'Reserva Mi Demostración',
+      businessNeeds: 'Cuéntanos sobre las necesidades de tu negocio...',
+      missingInformation: 'Información Faltante',
+      pleaseFilFill: 'Por favor completa todos los campos requeridos y selecciona una hora.',
+      demoBookedTitle: '¡Demostración Reservada!',
+      demoBookedSuccess: 'Tu demostración ha sido programada para {date} a las {time}. Te enviaremos un correo de confirmación con los detalles de la reunión.',
+      demoBookedButton: 'Volver a la página de inicio',
+      
+      // Footer
+      footerTagline: 'Estrategia, Alma y Estructura',
+      footerCopyright: '© 2025 Veronika N. Dimitrova. Todos los derechos reservados.',
     }
   }
 };

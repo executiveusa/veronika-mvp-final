@@ -315,7 +315,7 @@ const Index = () => {
             </div>
             
             <div className="flex items-center gap-6">
-              <a href="https://linkedin.com/in/veronika" target="_blank" rel="noopener noreferrer" 
+              <a href="https://www.linkedin.com/in/veronikandimitrova/" target="_blank" rel="noopener noreferrer" 
                  className="text-muted-foreground hover:text-primary transition-colors">
                 LinkedIn
               </a>

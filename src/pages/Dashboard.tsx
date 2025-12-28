@@ -1,9 +1,12 @@
 import { motion } from "framer-motion";
-import { Users, FolderOpen, DollarSign, TrendingUp, Calendar, FileText } from "lucide-react";
+import React from "react";
+import { Users, FolderOpen, DollarSign, TrendingUp, Calendar, FileText, Zap } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
+import { RubeAssistant } from "@/components/dashboard/rube-assistant";
 import { useTranslation } from 'react-i18next';
 
 const statsData = [
@@ -57,19 +60,36 @@ const upcomingTasks = [
 
 export default function Dashboard() {
   const { t } = useTranslation('common');
+  const [activeTab, setActiveTab] = React.useState("overview");
 
   return (
     <DashboardLayout>
       <div className="space-y-8">
-        {/* Header */}
+        {/* Header with Tabs */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
+          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
         >
-          <h1 className="text-3xl font-bold text-foreground mb-2">{t('overview')}</h1>
-          <p className="text-muted-foreground">{t('welcomeBack')}</p>
+          <div>
+            <h1 className="text-3xl font-bold text-foreground mb-2">{t('overview')}</h1>
+            <p className="text-muted-foreground">{t('welcomeBack')}</p>
+          </div>
         </motion.div>
+
+        {/* Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 sm:w-auto">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="rube" className="flex items-center gap-2">
+              <Zap className="h-4 w-4" />
+              Rube AI
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Overview Tab */}
+          <TabsContent value="overview" className="space-y-8 mt-8">
 
         {/* Stats Grid */}
         <motion.div
@@ -208,6 +228,13 @@ export default function Dashboard() {
             </div>
           </Card>
         </motion.div>
+          </TabsContent>
+
+          {/* Rube AI Tab */}
+          <TabsContent value="rube" className="mt-8">
+            <RubeAssistant />
+          </TabsContent>
+        </Tabs>
       </div>
     </DashboardLayout>
   );
