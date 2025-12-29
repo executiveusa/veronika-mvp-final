@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
-import { useAuth } from "@/contexts/auth-context";
+import { useAuth } from "@/hooks/use-auth";
 
 const settingsSections = [
   { id: "profile", label: "Profile", icon: User },

@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ProtectedRoute } from "@/components/auth/protected-route";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Clients from "./pages/dashboard/Clients";
 import Projects from "./pages/dashboard/Projects";
@@ -34,6 +35,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/book" element={<BookDemo />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
               
               {/* Protected Dashboard Routes */}
               <Route path="/dashboard" element={
