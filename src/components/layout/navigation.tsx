@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useAuth } from "@/contexts/auth-context";
 import { 
   LayoutDashboard, 
   Users, 
@@ -12,7 +13,8 @@ import {
   Settings,
   Menu,
   X,
-  ChevronRight
+  ChevronRight,
+  LogOut
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -32,6 +34,13 @@ const navigationItems = [
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   return (
     <>
@@ -142,27 +151,47 @@ export function Navigation() {
               })}
             </nav>
 
-            {/* User Profile */}
+            {/* User Profile + Logout */}
             <div 
-              className="pt-6 mt-6"
+              className="pt-6 mt-6 space-y-3"
               style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}
             >
               <motion.div 
                 whileHover={{ scale: 1.02 }}
-                className="flex items-center gap-3 p-3 rounded-xl transition-colors cursor-pointer"
+                className="flex items-center gap-3 p-3 rounded-xl transition-colors"
                 style={{ background: 'rgba(255, 255, 255, 0.03)' }}
               >
                 <div 
                   className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-semibold"
                   style={{ background: 'linear-gradient(135deg, #2D6A4F 0%, #40916C 100%)' }}
                 >
-                  D
+                  {user?.email?.[0]?.toUpperCase() || 'V'}
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-white">Demo User</p>
-                  <p className="text-xs" style={{ color: 'rgba(226, 232, 240, 0.5)' }}>demo@veronika.app</p>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-white truncate">
+                    {user?.email?.split('@')[0] || 'Veronika'}
+                  </p>
+                  <p className="text-xs truncate" style={{ color: 'rgba(226, 232, 240, 0.5)' }}>
+                    {user?.email || 'Admin'}
+                  </p>
                 </div>
               </motion.div>
+
+              {/* Logout Button */}
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleLogout}
+                className="flex items-center gap-3 w-full px-4 py-3 rounded-xl transition-all duration-200"
+                style={{
+                  background: 'rgba(239, 68, 68, 0.1)',
+                  border: '1px solid rgba(239, 68, 68, 0.2)',
+                  color: '#F87171'
+                }}
+              >
+                <LogOut className="h-5 w-5" />
+                <span className="font-medium">Sign Out</span>
+              </motion.button>
             </div>
           </div>
         </div>
