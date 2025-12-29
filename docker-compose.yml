@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  veronika-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+        - VITE_SUPABASE_PUBLISHABLE_KEY=${VITE_SUPABASE_PUBLISHABLE_KEY}
+    container_name: veronika-mvp
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+    labels:
+      # Traefik labels (for reverse proxy setups)
+      - "traefik.enable=true"
+      - "traefik.http.routers.veronika.rule=Host(`veronika.yourdomain.com`)"
+      - "traefik.http.routers.veronika.tls=true"
+      - "traefik.http.routers.veronika.tls.certresolver=letsencrypt"
+      # Coolify labels
+      - "coolify.managed=true"
+
+# For production with SSL via Traefik (optional)
+# Uncomment below if using Traefik reverse proxy
+#
+# networks:
+#   default:
+#     external:
+#       name: traefik-network
