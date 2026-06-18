@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
-import { RubeAssistant } from "@/components/dashboard/rube-assistant";
+import { PiAssistant } from "@/components/dashboard/pi-assistant";
 import { useTranslation } from 'react-i18next';
 
 const statsData = [
@@ -102,13 +102,13 @@ export default function Dashboard() {
             >
               Overview
             </TabsTrigger>
-            <TabsTrigger 
-              value="rube" 
+            <TabsTrigger
+              value="rube"
               className="flex items-center gap-2 data-[state=active]:bg-white/10 data-[state=active]:text-white rounded-lg"
               style={{ color: 'rgba(226, 232, 240, 0.7)' }}
             >
               <Zap className="h-4 w-4" />
-              Rube AI
+              Pi Agent
             </TabsTrigger>
           </TabsList>
 
@@ -334,9 +334,9 @@ export default function Dashboard() {
         </motion.div>
           </TabsContent>
 
-          {/* Rube AI Tab */}
+          {/* Pi Agent Tab */}
           <TabsContent value="rube" className="mt-8">
-            <RubeAssistant />
+            <PiAssistant />
           </TabsContent>
         </Tabs>
       </div>
