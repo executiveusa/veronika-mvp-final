@@ -1,595 +1,470 @@
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
-import { HeroSection } from '@/components/layout/hero-section';
-import { LanguageSwitcher } from '@/components/ui/language-switcher';
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, TrendingUp, Users, Target, Lightbulb, Rocket, Quote } from "lucide-react";
-import { Link } from 'react-router-dom';
-import { initGSAP } from '@/lib/gsap';
+import { useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import {
+  Activity,
+  ArrowDownRight,
+  ArrowUpRight,
+  Footprints,
+  Menu,
+  RotateCcw,
+  Users,
+  Wind,
+  X,
+} from "lucide-react";
+
+const modules = [
+  {
+    code: "01",
+    title: "MOVE",
+    body: "Mobility, strength, and guided practice built to fit into real schedules.",
+    icon: Footprints,
+  },
+  {
+    code: "02",
+    title: "RECOVER",
+    body: "Downshift the system with breath, sleep support, and intentional recovery.",
+    icon: Wind,
+  },
+  {
+    code: "03",
+    title: "RESET",
+    body: "Immersive formats that interrupt routine long enough to establish a better one.",
+    icon: RotateCcw,
+  },
+  {
+    code: "04",
+    title: "TEAMS",
+    body: "Strategic wellness programs for groups, communities, and organizations.",
+    icon: Users,
+  },
+];
+
+const sessions = [
+  ["06:40", "ARRIVE", "Breath + readiness check"],
+  ["07:00", "MOVE", "Mobility + strength"],
+  ["08:05", "RECOVER", "Downshift + refuel"],
+  ["12:30", "RESET", "Midday nervous-system break"],
+  ["17:45", "MOVE", "Low-friction evening practice"],
+];
 
 const Index = () => {
-  const { t } = useTranslation('common');
-  const [isScrolled, setIsScrolled] = useState(false);
-  const { scrollY } = useScroll();
-
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    setIsScrolled(latest > 50);
-  });
-
-  useEffect(() => {
-    initGSAP();
-  }, []);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Navigation Header - Transparent on hero, solid on scroll */}
-      <motion.nav 
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-        style={{
-          background: isScrolled 
-            ? 'rgba(15, 23, 42, 0.95)' 
-            : 'transparent',
-          backdropFilter: isScrolled ? 'blur(20px)' : 'none',
-          borderBottom: isScrolled ? '1px solid rgba(255, 255, 255, 0.1)' : 'none'
-        }}
-      >
-        <div className="container-max py-4 flex justify-between items-center">
-          <Link to="/" className="flex items-center gap-3">
-            <motion.span 
-              className="text-2xl font-display font-bold"
-              whileHover={{ scale: 1.05 }}
-              style={{ 
-                background: 'linear-gradient(135deg, #4ADE80 0%, #22D3EE 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
-              }}
-            >
-              Veronika
-            </motion.span>
-          </Link>
-          
-          <div className="hidden md:flex items-center gap-8">
+    <div className="wellness-v1 min-h-screen bg-[#dfe1dc] text-[#111411] selection:bg-[#ff5938] selection:text-[#111411]">
+      <style>{`
+        .wellness-v1 {
+          --ink: #111411;
+          --paper: #dfe1dc;
+          --paper-2: #cfd3cc;
+          --signal: #ff5938;
+          --blue: #244cff;
+          --lime: #d9ff43;
+          --line: rgba(17, 20, 17, 0.22);
+          font-family: Arial, Helvetica, sans-serif;
+        }
+        .wellness-v1 .mono {
+          font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        }
+        .wellness-v1 .grid-field {
+          background-image:
+            linear-gradient(to right, rgba(17,20,17,.10) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(17,20,17,.10) 1px, transparent 1px);
+          background-size: 42px 42px;
+        }
+        .wellness-v1 .scanline {
+          background: linear-gradient(90deg, transparent, rgba(255,89,56,.25), transparent);
+          animation: scan 6s linear infinite;
+        }
+        .wellness-v1 .tick {
+          background-image: repeating-linear-gradient(
+            to right,
+            var(--ink) 0,
+            var(--ink) 1px,
+            transparent 1px,
+            transparent 12px
+          );
+        }
+        .wellness-v1 .route {
+          background-image: radial-gradient(circle at center, var(--ink) 1.4px, transparent 1.5px);
+          background-size: 18px 18px;
+        }
+        @keyframes scan {
+          0% { transform: translateX(-110%); }
+          100% { transform: translateX(110%); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .wellness-v1 .scanline { animation: none; display: none; }
+        }
+      `}</style>
+
+      <header className="sticky top-0 z-50 border-b border-black/20 bg-[#dfe1dc]/95 backdrop-blur-md">
+        <div className="grid min-h-16 grid-cols-[1fr_auto] items-center md:grid-cols-[220px_1fr_auto]">
+          <a href="#top" className="flex h-full items-center border-r border-black/20 px-5 text-sm font-black tracking-[0.16em] md:px-7">
+            WELLNESS/STUDIO
+          </a>
+
+          <nav className="hidden h-full items-center md:flex">
             {[
-              { href: '#about', label: t('navMyStory') },
-              { href: '#services', label: t('navHowIHelp') },
-              { href: '#proof', label: t('navResults') },
-            ].map((link) => (
-              <motion.a 
-                key={link.href}
-                href={link.href} 
-                className="text-sm font-medium transition-colors relative group"
-                style={{ color: 'rgba(226, 232, 240, 0.8)' }}
-                whileHover={{ color: '#4ADE80' }}
+              ["SYSTEM", "#system"],
+              ["DAY", "#day"],
+              ["EXPERIENCE", "#experience"],
+              ["FIELD NOTES", "#notes"],
+            ].map(([label, href]) => (
+              <a
+                key={href}
+                href={href}
+                className="flex h-full items-center border-r border-black/20 px-5 text-[11px] font-bold tracking-[0.14em] transition-colors hover:bg-[#244cff] hover:text-white"
               >
-                {link.label}
-                <motion.span 
-                  className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-emerald-400 to-cyan-400"
-                  initial={{ width: 0 }}
-                  whileHover={{ width: '100%' }}
-                  transition={{ duration: 0.2 }}
-                />
-              </motion.a>
+                {label}
+              </a>
+            ))}
+          </nav>
+
+          <a
+            href="#start"
+            className="hidden h-full items-center gap-2 bg-[#111411] px-6 text-xs font-black tracking-[0.1em] text-white transition-colors hover:bg-[#ff5938] hover:text-[#111411] md:flex"
+          >
+            START <ArrowUpRight className="h-4 w-4" />
+          </a>
+
+          <button
+            type="button"
+            aria-label={menuOpen ? "Close navigation" : "Open navigation"}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((open) => !open)}
+            className="flex h-16 w-16 items-center justify-center border-l border-black/20 md:hidden"
+          >
+            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
+
+        {menuOpen && (
+          <div className="border-t border-black/20 md:hidden">
+            {[
+              ["SYSTEM", "#system"],
+              ["DAY", "#day"],
+              ["EXPERIENCE", "#experience"],
+              ["FIELD NOTES", "#notes"],
+              ["START", "#start"],
+            ].map(([label, href], index) => (
+              <a
+                key={href}
+                href={href}
+                onClick={() => setMenuOpen(false)}
+                className={`flex items-center justify-between border-b border-black/20 px-5 py-4 text-sm font-black tracking-[0.12em] ${
+                  index === 4 ? "bg-[#111411] text-white" : ""
+                }`}
+              >
+                {label}
+                <ArrowDownRight className="h-4 w-4" />
+              </a>
             ))}
           </div>
-          
-          <div className="flex items-center gap-4">
-            <LanguageSwitcher variant="minimal" />
-            <Link to="/book">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button 
-                  className="font-semibold px-6"
-                  style={{
-                    background: 'linear-gradient(135deg, #2D6A4F 0%, #40916C 100%)',
-                    color: 'white',
-                    boxShadow: '0 4px 15px rgba(45, 106, 79, 0.3)'
-                  }}
-                >
-                  {t('navLetsTalk')}
-                </Button>
-              </motion.div>
-            </Link>
-          </div>
-        </div>
-      </motion.nav>
+        )}
+      </header>
 
-      {/* Hero Section */}
-      <HeroSection />
+      <main id="top">
+        <section className="relative overflow-hidden border-b border-black/20">
+          <div className="absolute inset-0 grid-field opacity-70" aria-hidden="true" />
+          {!reduceMotion && <div className="scanline absolute inset-y-0 left-0 w-1/2" aria-hidden="true" />}
 
-      {/* Problem Section - Dark theme continuation */}
-      <section 
-        className="py-24 relative overflow-hidden" 
-        id="problem" 
-        style={{ 
-          background: 'linear-gradient(180deg, #0F172A 0%, #1E293B 50%, #0F172A 100%)'
-        }}
-      >
-        {/* Subtle accent */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full blur-[120px] opacity-30"
-          style={{ background: 'radial-gradient(circle, rgba(196, 69, 54, 0.4) 0%, transparent 70%)' }} 
-        />
-        
-        <div className="container-max relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="max-w-3xl mx-auto text-center mb-16"
-          >
-            <motion.span 
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold mb-6"
-              style={{ 
-                background: 'rgba(196, 69, 54, 0.15)',
-                border: '1px solid rgba(196, 69, 54, 0.3)',
-                color: '#FB7185'
-              }}
-            >
-              <Target className="h-4 w-4" />
-              Common Challenges
-            </motion.span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold leading-tight"
-              style={{ color: 'white' }}
-            >
-              {t('problemTitle')}
-            </h2>
-          </motion.div>
-
-          <div className="max-w-2xl mx-auto space-y-6">
-            {[
-              t('problemPoint1'),
-              t('problemPoint2'),
-              t('problemPoint3'),
-              t('problemPoint4'),
-            ].map((point, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ x: 10, transition: { duration: 0.2 } }}
-                className="flex items-start gap-4 p-6 rounded-2xl cursor-default"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  backdropFilter: 'blur(10px)'
-                }}
-              >
-                <div 
-                  className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ 
-                    background: 'linear-gradient(135deg, rgba(196, 69, 54, 0.3) 0%, rgba(196, 69, 54, 0.1) 100%)',
-                    border: '1px solid rgba(196, 69, 54, 0.3)'
-                  }}
-                >
-                  <span className="font-bold text-rose-400">{index + 1}</span>
+          <div className="relative grid min-h-[760px] lg:grid-cols-[minmax(0,1.2fr)_430px]">
+            <div className="flex flex-col justify-between border-b border-black/20 lg:border-b-0 lg:border-r">
+              <div className="grid grid-cols-[64px_1fr] border-b border-black/20 sm:grid-cols-[88px_1fr]">
+                <div className="flex items-start justify-center border-r border-black/20 pt-7">
+                  <span className="mono text-[10px] font-bold tracking-[0.18em] [writing-mode:vertical-rl]">
+                    FIELD PRACTICE / V1
+                  </span>
                 </div>
-                <p className="text-lg leading-relaxed" style={{ color: 'rgba(226, 232, 240, 0.9)' }}>{point}</p>
-              </motion.div>
-            ))}
+
+                <div className="px-5 py-12 sm:px-8 md:px-12 md:py-16">
+                  <div className="mb-8 flex flex-wrap items-center gap-3">
+                    <span className="bg-[#111411] px-3 py-2 text-[10px] font-black tracking-[0.14em] text-white">
+                      MOVEMENT
+                    </span>
+                    <span className="bg-[#ff5938] px-3 py-2 text-[10px] font-black tracking-[0.14em]">
+                      RECOVERY
+                    </span>
+                    <span className="bg-[#d9ff43] px-3 py-2 text-[10px] font-black tracking-[0.14em]">
+                      PRACTICE
+                    </span>
+                  </div>
+
+                  <motion.h1
+                    initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+                    animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                    transition={{ duration: 0.55 }}
+                    className="max-w-5xl text-[clamp(3.5rem,10vw,9rem)] font-black uppercase leading-[0.78] tracking-[-0.075em]"
+                  >
+                    BUILD
+                    <br />
+                    A BODY
+                    <br />
+                    THAT
+                    <span className="ml-[0.08em] inline-block -rotate-2 bg-[#244cff] px-[0.08em] text-white">
+                      LASTS.
+                    </span>
+                  </motion.h1>
+
+                  <div className="mt-12 grid max-w-3xl gap-8 border-t border-black/25 pt-6 md:grid-cols-[1fr_240px]">
+                    <p className="max-w-xl text-lg font-semibold leading-snug sm:text-xl">
+                      A generic wellness practice for people who want more capacity, better recovery,
+                      and routines that survive real life.
+                    </p>
+                    <div className="mono text-xs leading-6">
+                      <div>STATUS / ACTIVE</div>
+                      <div>FOCUS / DAILY CAPACITY</div>
+                      <div>FORMAT / PRACTICE + IMMERSION</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-3">
+                {[
+                  ["01", "NOTICE", "What is your system asking for?"],
+                  ["02", "PRACTICE", "Do the smallest useful thing."],
+                  ["03", "REPEAT", "Build capacity without drama."],
+                ].map(([n, title, copy]) => (
+                  <div key={n} className="border-t border-black/20 p-5 first:border-t-0 md:border-l md:border-t-0 md:first:border-l-0">
+                    <div className="mono mb-8 text-[10px] font-bold">{n}</div>
+                    <div className="text-xl font-black tracking-[-0.03em]">{title}</div>
+                    <div className="mt-2 max-w-xs text-sm leading-5 text-black/70">{copy}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <aside className="relative bg-[#111411] text-white">
+              <div className="route absolute inset-0 opacity-[0.12]" aria-hidden="true" />
+              <div className="relative flex h-full flex-col justify-between p-6 sm:p-8">
+                <div className="flex items-center justify-between border-b border-white/25 pb-4">
+                  <span className="mono text-[10px] font-bold tracking-[0.18em]">LIVE SIGNAL / 001</span>
+                  <Activity className="h-5 w-5 text-[#d9ff43]" />
+                </div>
+
+                <div className="my-12">
+                  <div className="relative mx-auto aspect-square w-full max-w-[320px]">
+                    <div className="absolute inset-[4%] rounded-full border border-white/20" />
+                    <div className="absolute inset-[16%] rounded-full border border-white/25" />
+                    <div className="absolute inset-[30%] rounded-full border border-white/30" />
+                    <div className="absolute inset-x-[8%] top-1/2 h-px bg-white/25" />
+                    <div className="absolute inset-y-[8%] left-1/2 w-px bg-white/25" />
+                    <motion.div
+                      animate={reduceMotion ? undefined : { rotate: 360 }}
+                      transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
+                      className="absolute inset-[4%]"
+                    >
+                      <div className="absolute left-1/2 top-0 h-1/2 w-px origin-bottom bg-[#ff5938]" />
+                      <div className="absolute left-[calc(50%-5px)] top-[-5px] h-3 w-3 rounded-full bg-[#ff5938]" />
+                    </motion.div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="text-6xl font-black tracking-[-0.06em]">74</div>
+                        <div className="mono mt-2 text-[10px] tracking-[0.18em] text-white/60">CAPACITY INDEX</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 border border-white/20">
+                  {[
+                    ["MOVE", "82"],
+                    ["REST", "67"],
+                    ["FOCUS", "73"],
+                  ].map(([label, value]) => (
+                    <div key={label} className="border-l border-white/20 p-3 first:border-l-0">
+                      <div className="mono text-[9px] text-white/55">{label}</div>
+                      <div className="mt-2 text-2xl font-black">{value}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </aside>
           </div>
+        </section>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-center text-xl mt-12 italic"
-            style={{ color: 'rgba(226, 232, 240, 0.6)' }}
-          >
-            {t('problemTransition')}
-          </motion.p>
-        </div>
-      </section>
-
-      {/* About Section - Light contrast for variety */}
-      <section className="py-24 relative overflow-hidden" id="about" style={{ background: '#FAFBFC' }}>
-        <div className="container-max">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Photo */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="relative"
-            >
-              <motion.div 
-                className="aspect-[3/4] rounded-3xl overflow-hidden relative"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-                style={{ 
-                  boxShadow: '0 25px 50px -12px rgba(45, 106, 79, 0.3)'
-                }}
-              >
-                <img 
-                  src="https://media.licdn.com/dms/image/v2/D5603AQHTx_PwHFN-9A/profile-displayphoto-crop_800_800/B56Ze1GQvOH8AI-/0/1751090007321?e=1768435200&v=beta&t=cfMMXrGdWVnwhucI95Vt_fZ1Tnb1NjZdeMhIMjMzpTU"
-                  alt="Veronika Dimitrova - Strategic Business Consultant"
-                  className="absolute inset-0 w-full h-full object-cover object-center"
-                />
-                {/* Subtle overlay for depth */}
-                <div 
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    background: 'linear-gradient(to top, rgba(45, 106, 79, 0.3) 0%, transparent 50%)'
-                  }}
-                />
-              </motion.div>
-              
-              {/* Decorative elements */}
-              <motion.div 
-                animate={{ y: [-5, 5, -5] }}
-                transition={{ duration: 4, repeat: Infinity }}
-                className="absolute -bottom-4 -right-4 w-20 h-20 rounded-2xl -z-10"
-                style={{ background: 'linear-gradient(135deg, #C44536 0%, #E76F51 100%)', opacity: 0.8 }}
-              />
-            </motion.div>
-
-            {/* Content */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="space-y-6"
-            >
-              <motion.span 
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold"
-                style={{ 
-                  background: 'rgba(45, 106, 79, 0.1)',
-                  border: '1px solid rgba(45, 106, 79, 0.2)',
-                  color: '#2D6A4F'
-                }}
-              >
-                <Users className="h-4 w-4" />
-                About Me
-              </motion.span>
-              
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold leading-tight"
-                style={{ color: '#1A1A1A' }}
-              >
-                {t('aboutTitle')}
+        <section id="system" className="border-b border-black/20">
+          <div className="grid lg:grid-cols-[320px_1fr]">
+            <div className="border-b border-black/20 bg-[#244cff] p-6 text-white lg:border-b-0 lg:border-r">
+              <div className="mono text-[10px] font-bold tracking-[0.18em]">SYSTEM / FOUR MODES</div>
+              <h2 className="mt-20 text-5xl font-black uppercase leading-[0.86] tracking-[-0.06em]">
+                USE WHAT
+                <br />
+                YOU NEED.
               </h2>
-              
-              <p className="text-lg leading-relaxed" style={{ color: '#4A4A4A' }}>
-                {t('aboutParagraph1')}
+              <p className="mt-6 max-w-[250px] text-sm leading-6 text-white/75">
+                No lifestyle theater. Each mode solves a different problem and can stand alone.
               </p>
-              
-              <p className="text-lg leading-relaxed" style={{ color: '#4A4A4A' }}>
-                {t('aboutParagraph2')}
-              </p>
-              
-              <p className="text-lg leading-relaxed" style={{ color: '#4A4A4A' }}>
-                {t('aboutParagraph3')}
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Services Section - Dark elegant */}
-      <section 
-        className="py-24 relative overflow-hidden" 
-        id="services" 
-        style={{ 
-          background: 'linear-gradient(180deg, #0F172A 0%, #1E293B 100%)'
-        }}
-      >
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-[150px] opacity-20"
-          style={{ background: 'radial-gradient(circle, rgba(45, 106, 79, 0.5) 0%, transparent 70%)' }} 
-        />
-        
-        <div className="container-max relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <motion.span 
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold mb-6"
-              style={{ 
-                background: 'rgba(45, 106, 79, 0.15)',
-                border: '1px solid rgba(45, 106, 79, 0.3)',
-                color: '#4ADE80'
-              }}
-            >
-              <Lightbulb className="h-4 w-4" />
-              Services
-            </motion.span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-white">
-              {t('servicesTitle')}
-            </h2>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {[
-              { title: t('service1Title'), hook: t('service1Hook'), desc: t('service1Desc'), outcome: t('service1Outcome'), icon: TrendingUp },
-              { title: t('service2Title'), hook: t('service2Hook'), desc: t('service2Desc'), outcome: t('service2Outcome'), icon: Users },
-              { title: t('service3Title'), hook: t('service3Hook'), desc: t('service3Desc'), outcome: t('service3Outcome'), icon: Target },
-              { title: t('service4Title'), hook: t('service4Hook'), desc: t('service4Desc'), outcome: t('service4Outcome'), icon: Rocket },
-            ].map((service, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -8, transition: { duration: 0.2 } }}
-                className="p-8 rounded-2xl group cursor-default"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  backdropFilter: 'blur(10px)'
-                }}
-              >
-                <div 
-                  className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-110"
-                  style={{ 
-                    background: 'linear-gradient(135deg, rgba(45, 106, 79, 0.3) 0%, rgba(45, 106, 79, 0.1) 100%)',
-                    border: '1px solid rgba(45, 106, 79, 0.3)'
-                  }}
-                >
-                  <service.icon className="h-6 w-6 text-emerald-400" />
-                </div>
-                <h3 className="text-xl font-display font-semibold text-white mb-2">
-                  {service.title}
-                </h3>
-                <p className="font-medium mb-4 text-emerald-400">{service.hook}</p>
-                <p className="mb-4" style={{ color: 'rgba(226, 232, 240, 0.7)' }}>{service.desc}</p>
-                <p className="text-sm italic pt-4" style={{ color: 'rgba(226, 232, 240, 0.5)', borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                  → {service.outcome}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Process Section - Light for contrast */}
-      <section className="py-24 relative" id="process" style={{ background: '#FAFBFC' }}>
-        <div className="container-max">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <motion.span 
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold mb-6"
-              style={{ 
-                background: 'rgba(45, 106, 79, 0.1)',
-                border: '1px solid rgba(45, 106, 79, 0.2)',
-                color: '#2D6A4F'
-              }}
-            >
-              <Sparkles className="h-4 w-4" />
-              How We Work
-            </motion.span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold" style={{ color: '#1A1A1A' }}>
-              {t('processTitle')}
-            </h2>
-          </motion.div>
-
-          <div className="grid md:grid-cols-4 gap-8">
-            {[
-              { title: t('processStep1Title'), desc: t('processStep1Desc'), num: '01' },
-              { title: t('processStep2Title'), desc: t('processStep2Desc'), num: '02' },
-              { title: t('processStep3Title'), desc: t('processStep3Desc'), num: '03' },
-              { title: t('processStep4Title'), desc: t('processStep4Desc'), num: '04' },
-            ].map((step, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.15 }}
-                className="text-center group"
-              >
-                <motion.div 
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  className="w-20 h-20 rounded-2xl mx-auto mb-6 flex items-center justify-center transition-all duration-300"
-                  style={{ 
-                    background: 'linear-gradient(135deg, #2D6A4F 0%, #40916C 100%)',
-                    boxShadow: '0 10px 30px rgba(45, 106, 79, 0.3)'
-                  }}
-                >
-                  <span className="text-2xl font-bold text-white">{step.num}</span>
-                </motion.div>
-                <h3 className="text-lg font-display font-semibold mb-3" style={{ color: '#1A1A1A' }}>
-                  {step.title}
-                </h3>
-                <p className="text-sm" style={{ color: '#6B7280' }}>{step.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Proof/Testimonials Section - Dark elegant */}
-      <section 
-        className="py-24 relative overflow-hidden" 
-        id="proof" 
-        style={{ 
-          background: 'linear-gradient(180deg, #0F172A 0%, #1E293B 50%, #0F172A 100%)'
-        }}
-      >
-        <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full blur-[120px] opacity-20"
-          style={{ background: 'radial-gradient(circle, rgba(99, 102, 241, 0.5) 0%, transparent 70%)' }} 
-        />
-        
-        <div className="container-max relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <motion.span 
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold mb-6"
-              style={{ 
-                background: 'rgba(99, 102, 241, 0.15)',
-                border: '1px solid rgba(99, 102, 241, 0.3)',
-                color: '#A5B4FC'
-              }}
-            >
-              <Quote className="h-4 w-4" />
-              Testimonials
-            </motion.span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-white">
-              {t('proofTitle')}
-            </h2>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { quote: t('testimonial1Quote'), name: t('testimonial1Name'), role: t('testimonial1Role'), metric: t('testimonial1Metric') },
-              { quote: t('testimonial2Quote'), name: t('testimonial2Name'), role: t('testimonial2Role'), metric: t('testimonial2Metric') },
-              { quote: t('testimonial3Quote'), name: t('testimonial3Name'), role: t('testimonial3Role') },
-            ].map((testimonial, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.15 }}
-                whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                className="p-8 rounded-2xl"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  backdropFilter: 'blur(10px)'
-                }}
-              >
-                <Quote className="h-8 w-8 mb-4 text-indigo-400 opacity-50" />
-                <p className="mb-6 italic text-lg leading-relaxed" style={{ color: 'rgba(226, 232, 240, 0.9)' }}>
-                  "{testimonial.quote}"
-                </p>
-                <div className="pt-4" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                  <p className="font-semibold text-white">{testimonial.name}</p>
-                  <p className="text-sm" style={{ color: 'rgba(226, 232, 240, 0.5)' }}>{testimonial.role}</p>
-                  {testimonial.metric && (
-                    <p className="text-sm font-medium mt-2 text-emerald-400">{testimonial.metric}</p>
-                  )}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA Section - Gradient for impact */}
-      <section 
-        className="py-24 relative overflow-hidden"
-        style={{ 
-          background: 'linear-gradient(135deg, #2D6A4F 0%, #40916C 50%, #84A98C 100%)'
-        }}
-      >
-        {/* Decorative elements */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-96 h-96 rounded-full blur-[100px] opacity-30"
-            style={{ background: 'radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%)' }} 
-          />
-          <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full blur-[80px] opacity-20"
-            style={{ background: 'radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%)' }} 
-          />
-        </div>
-        
-        <div className="container-max text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="max-w-2xl mx-auto space-y-8"
-          >
-            <motion.div
-              animate={{ y: [-5, 5, -5] }}
-              transition={{ duration: 4, repeat: Infinity }}
-            >
-              <Sparkles className="h-12 w-12 mx-auto mb-4 text-white/80" />
-            </motion.div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-white">
-              {t('ctaTitle')}
-            </h2>
-            <p className="text-xl text-white/90">
-              {t('ctaSubtitle')}
-            </p>
-            <Link to="/book">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-                className="inline-block"
-              >
-                <Button 
-                  size="lg" 
-                  className="text-lg px-10 py-6 rounded-xl font-semibold group"
-                  style={{ 
-                    background: 'white',
-                    color: '#2D6A4F',
-                    boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)'
-                  }}
-                >
-                  {t('ctaButton')}
-                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                </Button>
-              </motion.div>
-            </Link>
-            <p className="text-sm text-white/70">{t('ctaReassurance')}</p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Footer - Dark sleek */}
-      <footer 
-        className="py-16 relative"
-        style={{ background: '#0F172A' }}
-      >
-        <div className="container-max">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-            <div className="text-center md:text-left">
-              <h3 
-                className="text-2xl font-display font-bold mb-2"
-                style={{ 
-                  background: 'linear-gradient(135deg, #4ADE80 0%, #22D3EE 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent'
-                }}
-              >
-                Veronika
-              </h3>
-              <p className="text-sm" style={{ color: 'rgba(226, 232, 240, 0.5)' }}>{t('footerTagline')}</p>
             </div>
-            
-            <div className="flex items-center gap-6">
-              <motion.a 
-                href="https://www.linkedin.com/in/veronikandimitrova/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.1, color: '#4ADE80' }}
-                className="transition-colors"
-                style={{ color: 'rgba(226, 232, 240, 0.7)' }}
-              >
-                LinkedIn
-              </motion.a>
+
+            <div className="grid sm:grid-cols-2">
+              {modules.map((module, index) => {
+                const Icon = module.icon;
+                return (
+                  <motion.article
+                    key={module.code}
+                    whileHover={reduceMotion ? undefined : { x: index % 2 === 0 ? 5 : -5 }}
+                    className="group min-h-[300px] border-b border-black/20 p-6 sm:border-l sm:first:border-l-0 sm:[&:nth-child(3)]:border-b-0 sm:[&:nth-child(4)]:border-b-0"
+                  >
+                    <div className="flex items-start justify-between">
+                      <span className="mono text-[10px] font-bold">{module.code}</span>
+                      <Icon className="h-6 w-6 transition-transform group-hover:rotate-6" />
+                    </div>
+                    <div className="mt-20">
+                      <h3 className="text-4xl font-black tracking-[-0.055em]">{module.title}</h3>
+                      <p className="mt-4 max-w-sm text-base leading-6 text-black/65">{module.body}</p>
+                    </div>
+                  </motion.article>
+                );
+              })}
             </div>
           </div>
-          
-          <div className="mt-12 pt-8 text-center" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
-            <p className="text-sm" style={{ color: 'rgba(226, 232, 240, 0.4)' }}>{t('footerCopyright')}</p>
+        </section>
+
+        <section id="day" className="border-b border-black/20 bg-[#111411] text-white">
+          <div className="grid lg:grid-cols-[1fr_420px]">
+            <div className="p-5 sm:p-8 md:p-12">
+              <div className="flex items-center justify-between border-b border-white/20 pb-4">
+                <span className="mono text-[10px] font-bold tracking-[0.18em]">DAY MAP / SAMPLE</span>
+                <span className="mono text-[10px] text-[#d9ff43]">NO HEROICS REQUIRED</span>
+              </div>
+
+              <div className="mt-8">
+                {sessions.map(([time, mode, detail], index) => (
+                  <div
+                    key={time}
+                    className="grid grid-cols-[72px_82px_1fr] items-center border-b border-white/15 py-5 sm:grid-cols-[90px_120px_1fr]"
+                  >
+                    <span className="mono text-xs text-white/55">{time}</span>
+                    <span className={`text-xs font-black tracking-[0.12em] ${
+                      index === 1 || index === 4 ? "text-[#ff5938]" : index === 2 ? "text-[#d9ff43]" : "text-white"
+                    }`}>
+                      {mode}
+                    </span>
+                    <span className="text-sm text-white/75 sm:text-base">{detail}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="border-t border-white/20 bg-[#ff5938] p-8 text-[#111411] lg:border-l lg:border-t-0">
+              <div className="mono text-[10px] font-bold tracking-[0.18em]">RULE / 01</div>
+              <div className="mt-14 text-[clamp(3rem,8vw,6rem)] font-black uppercase leading-[0.82] tracking-[-0.07em]">
+                LESS
+                <br />
+                FRICTION.
+                <br />
+                MORE
+                <br />
+                RETURN.
+              </div>
+              <p className="mt-8 max-w-sm text-base font-semibold leading-6">
+                The system is designed around coming back tomorrow, not winning today.
+              </p>
+            </div>
           </div>
-        </div>
-      </footer>
+        </section>
+
+        <section id="experience" className="border-b border-black/20">
+          <div className="grid min-h-[680px] lg:grid-cols-[44%_56%]">
+            <div className="relative min-h-[420px] overflow-hidden border-b border-black/20 bg-[#d9ff43] lg:border-b-0 lg:border-r">
+              <div className="absolute inset-0 grid-field opacity-40" />
+              <div className="absolute left-[8%] top-[10%] h-[58%] w-[58%] rounded-full border-[18px] border-[#111411]" />
+              <div className="absolute bottom-[8%] right-[8%] h-[42%] w-[42%] bg-[#244cff]" />
+              <div className="absolute bottom-[16%] left-[16%] h-[22%] w-[22%] bg-[#ff5938]" />
+              <div className="absolute inset-x-0 bottom-0 tick h-3 opacity-70" />
+              <div className="absolute left-5 top-5 mono text-[10px] font-bold tracking-[0.16em]">
+                MEDIA ZONE / REPLACE WITH HUMAN MOVEMENT FILM
+              </div>
+            </div>
+
+            <div className="flex flex-col justify-between p-6 sm:p-8 md:p-12">
+              <div>
+                <span className="mono text-[10px] font-bold tracking-[0.18em]">IMMERSION / SAMPLE FORMAT</span>
+                <h2 className="mt-10 max-w-3xl text-[clamp(3.2rem,7vw,7.4rem)] font-black uppercase leading-[0.82] tracking-[-0.07em]">
+                  LEAVE
+                  <br />
+                  DIFFERENT.
+                </h2>
+              </div>
+
+              <div className="mt-16 grid gap-8 border-t border-black/20 pt-6 md:grid-cols-2">
+                <p className="text-lg font-semibold leading-7">
+                  A multi-day reset built around movement, sleep, food, recovery, and enough unstructured time to notice what is actually working.
+                </p>
+                <div className="mono text-xs leading-6 text-black/65">
+                  <div>DURATION / FLEXIBLE</div>
+                  <div>GROUP / SMALL FORMAT</div>
+                  <div>OUTPUT / PERSONAL PRACTICE PLAN</div>
+                  <div>FOLLOW-UP / INTEGRATION CHECK</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="notes" className="border-b border-black/20">
+          <div className="grid md:grid-cols-3">
+            {[
+              ["FIELD NOTE 01", "A practice only works if it can survive your worst week."],
+              ["FIELD NOTE 02", "Recovery is a training input, not time left over after training."],
+              ["FIELD NOTE 03", "The goal is more usable energy, not more wellness tasks."],
+            ].map(([label, copy], index) => (
+              <div
+                key={label}
+                className={`min-h-[320px] border-b border-black/20 p-6 md:border-b-0 md:border-l md:first:border-l-0 ${
+                  index === 1 ? "bg-[#244cff] text-white" : ""
+                }`}
+              >
+                <div className="mono text-[10px] font-bold tracking-[0.16em]">{label}</div>
+                <p className="mt-24 text-3xl font-black leading-[1.02] tracking-[-0.045em]">{copy}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="start" className="bg-[#111411] text-white">
+          <div className="grid lg:grid-cols-[1fr_360px]">
+            <div className="p-6 sm:p-8 md:p-12">
+              <div className="mono text-[10px] font-bold tracking-[0.18em] text-white/55">NEXT / PICK ONE THING</div>
+              <h2 className="mt-10 max-w-5xl text-[clamp(3.4rem,9vw,8.5rem)] font-black uppercase leading-[0.8] tracking-[-0.075em]">
+                START
+                <br />
+                SMALL.
+                <br />
+                <span className="text-[#d9ff43]">RETURN.</span>
+              </h2>
+            </div>
+
+            <div className="flex flex-col justify-between border-t border-white/20 bg-[#244cff] p-6 lg:border-l lg:border-t-0">
+              <div className="mono text-[10px] font-bold tracking-[0.18em]">DEMO CTA / REPLACE LATER</div>
+              <div className="mt-24">
+                <p className="text-xl font-bold leading-snug">
+                  Choose the next useful step: a practice, an immersive experience, or a team program.
+                </p>
+                <a
+                  href="#system"
+                  className="mt-8 flex items-center justify-between border border-white px-4 py-4 text-xs font-black tracking-[0.12em] transition-colors hover:bg-white hover:text-[#244cff]"
+                >
+                  EXPLORE THE SYSTEM <ArrowUpRight className="h-4 w-4" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <footer className="grid border-t border-white/20 md:grid-cols-[1fr_auto]">
+            <div className="px-6 py-5 mono text-[10px] tracking-[0.14em] text-white/50">
+              WELLNESS/STUDIO — GENERIC STRATEGIC WELLNESS DEMO — V1
+            </div>
+            <div className="border-t border-white/20 px-6 py-5 mono text-[10px] tracking-[0.14em] text-white/50 md:border-l md:border-t-0">
+              SYSTEM / MOVE / RECOVER / RESET
+            </div>
+          </footer>
+        </section>
+      </main>
     </div>
   );
 };
